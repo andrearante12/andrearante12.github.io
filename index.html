@@ -3,894 +3,108 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Andre Arante — Robotics & Computer Vision Engineer</title>
-<meta name="description" content="Andre Arante — robotics, computer vision, and reinforcement learning engineer. Computer Engineering @ GWU. Robotic arms, VLM-driven robots, RL agents, and edge CV research.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
-<script type="importmap">
-{ "imports": {
-    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-  } }
-</script>
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --bg: #0a0a0f;
-    --bg2: #111118;
-    --card: #14141c;
-    --border: rgba(255,255,255,0.07);
-    --border-hover: rgba(255,255,255,0.14);
-    --text: #e8e8f0;
-    --muted: #6e6e88;
-    --accent: #6c63ff;
-    --accent2: #00d4aa;
-    --mono: 'DM Mono', monospace;
-    --display: 'Syne', sans-serif;
-    --body: 'DM Sans', sans-serif;
-    --section-pad: 100px;
-  }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--body);
-    font-size: 16px;
-    line-height: 1.7;
-    overflow-x: hidden;
-  }
-
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-    opacity: 0.4;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  /* NAV */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    padding: 0 40px; height: 60px;
-    display: flex; align-items: center; justify-content: space-between;
-    background: rgba(10,10,15,0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-  }
-  .nav-logo { font-family: var(--mono); font-size: 13px; color: var(--accent2); letter-spacing: 0.08em; text-decoration: none; }
-  .nav-links { display: flex; gap: 32px; list-style: none; }
-  .nav-links a { font-family: var(--mono); font-size: 12px; color: var(--muted); text-decoration: none; letter-spacing: 0.06em; text-transform: uppercase; transition: color 0.2s; }
-  .nav-links a:hover { color: var(--text); }
-
-  /* HERO */
-  .hero {
-    min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
-    padding: 100px 80px 80px; position: relative; z-index: 1;
-  }
-  /* one continuous, fixed sky behind the hero + the sections below it */
-  #sky-canvas { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-  .sky-glow {
-    position: fixed; inset: 0; z-index: 0; pointer-events: none;
-    background:
-      radial-gradient(80% 55% at 80% -8%, rgba(108,99,255,0.14), transparent 60%),
-      radial-gradient(60% 45% at 8% 22%, rgba(0,212,170,0.06), transparent 60%);
-  }
-  .hero-content { position: relative; z-index: 1; }
-  .hero-eyebrow {
-    font-family: var(--mono); font-size: 12px; color: var(--accent2);
-    letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 24px;
-    display: flex; align-items: center; gap: 12px;
-  }
-  .hero-eyebrow::before { content: ''; display: inline-block; width: 32px; height: 1px; background: var(--accent2); }
-  h1.hero-name { font-family: var(--display); font-size: clamp(64px,9vw,130px); font-weight: 800; line-height: 0.95; letter-spacing: -0.03em; margin-bottom: 28px; }
-  h1.hero-name .accent-word { color: transparent; -webkit-text-stroke: 1.5px rgba(255,255,255,0.25); }
-  .hero-tagline { font-size: clamp(16px,2vw,20px); color: var(--muted); max-width: 540px; margin-bottom: 48px; line-height: 1.6; font-weight: 300; }
-  .hero-tagline strong { color: var(--text); font-weight: 500; }
-  .hero-cta { display: flex; gap: 16px; flex-wrap: wrap; }
-  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 28px; border-radius: 4px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; }
-  .btn-primary { background: var(--accent); color: #fff; }
-  .btn-primary:hover { background: #7d75ff; transform: translateY(-1px); }
-  .btn-ghost { border-color: var(--border-hover); color: var(--muted); }
-  .btn-ghost:hover { border-color: var(--text); color: var(--text); }
-
-  /* SECTIONS */
-  section { position: relative; z-index: 1; padding: var(--section-pad) 80px; }
-  .section-label { font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
-  .section-label::after { content: ''; flex: 1; max-width: 60px; height: 1px; background: var(--accent); opacity: 0.5; }
-  h2.section-title { font-family: var(--display); font-size: clamp(36px,5vw,60px); font-weight: 700; line-height: 1.05; letter-spacing: -0.025em; margin-bottom: 56px; }
-
-  /* TOOLKIT — skill tags, closing the page just above Contact */
-  #stack { background: var(--bg2); padding-bottom: 0; }
-  #contact { padding-top: 72px; }
-  .stack-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 36px; align-items: start; max-width: 1060px; }
-  .stack-group-label { font-family: var(--mono); font-size: 11px; color: var(--accent2); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 10px; }
-  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
-  .tag { font-family: var(--mono); font-size: 11px; padding: 5px 12px; border-radius: 3px; border: 1px solid var(--border); color: var(--muted); letter-spacing: 0.04em; transition: all 0.2s; }
-  .tag:hover { border-color: var(--accent); color: var(--accent); }
-  .tag.active { background: rgba(108,99,255,0.12); border-color: var(--accent); color: var(--accent); }
-
-  /* HERO SCENE — the page "lands" on a horizon at the bottom of the hero.
-     Dark theme shows the observatory; the cream theme swaps in a drafting
-     plate (see .plate below + assets/theme.css). */
-  .hero { overflow: hidden; padding-bottom: 360px; }
-  .hero-content { position: relative; z-index: 2; }
-  .scene { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
-
-  .observatory { position: absolute; left: 0; right: 0; bottom: 0; height: 300px; z-index: 1; pointer-events: none; }
-  .observatory .haze {
-    position: absolute; left: 0; right: 0; bottom: 90px; height: 230px;
-    background:
-      radial-gradient(120% 100% at 72% 100%, rgba(0,212,170,0.10), transparent 72%),
-      linear-gradient(to top, rgba(108,99,255,0.09), transparent 75%);
-  }
-  .observatory .ground { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 150px; display: block; }
-  .observatory .telescope { position: absolute; bottom: 56px; right: 7%; width: 360px; height: 290px; display: block; }
-
-  /* narrow: the hero copy owns the column, so the whole plate steps out
-     (assets/so101.js also skips the model fetch below this width) */
-  @media (max-width: 760px) {
-    .plate { display: none !important; }
-  }
-  @media (max-width: 600px) {
-    .hero { padding-bottom: 270px; }
-    .observatory { height: 240px; }
-    .observatory .haze { bottom: 72px; height: 170px; }
-    .observatory .ground { height: 112px; }
-    .observatory .telescope { width: 240px; height: 200px; right: 2%; bottom: 44px; }
-  }
-
-
-  /* ── DRAFTING PLATE (cream theme) ──
-     A datum rule set alongside the hero header, with the SO-101 standing on it.
-     `.plate`'s top edge IS the rule: assets/so101.js positions the canvas so
-     the robot's ground plane lands exactly there, whatever the camera does.
-     The vars below are what the ?debug panel drives. */
-  .plate { display: none; position: absolute; left: 0; right: 0; top: var(--datum-top, 46vh); height: 0; z-index: 1; pointer-events: none; }
-  .datum {
-    position: absolute; left: 0; right: 0; top: 0; height: 52px;
-    border-top: 1px solid rgba(28,26,22,0.55);
-    box-shadow: inset 0 4px 0 -3px rgba(28,26,22,0.30);
-    background: repeating-linear-gradient(45deg, rgba(28,26,22,0.22) 0 1px, transparent 1px 11px);
-    -webkit-mask-image: linear-gradient(to bottom, #000 0 26px, transparent 26px);
-    mask-image: linear-gradient(to bottom, #000 0 26px, transparent 26px);
-  }
-  /* the 3D robot; `top` is set from JS to seat it on the rule */
-  .arm-3d { position: absolute; right: var(--arm-right, 2%); width: var(--arm-w, 900px); height: var(--arm-h, 900px); display: block; opacity: 0; transition: opacity 0.8s ease; }
-  .arm-3d.is-loaded { opacity: 1; }
-  /* hand-drawn elevation: only shown if the model can't be rendered */
-  .arm-plate { position: absolute; right: 7%; bottom: 0; width: 520px; height: 300px; display: none; }
-  .plate.model-failed .arm-plate { display: block; }
-  .plate-caption { top: 64px; bottom: auto; }
-  .plate-caption {
-    position: absolute; right: 6%; text-align: right;
-    font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
-    color: var(--muted); text-transform: uppercase;
-  }
-  .arm-plate .dim { stroke: var(--accent); fill: var(--accent); }
-  .arm-plate .dim line, .arm-plate .dim path { stroke: var(--accent); fill: none; stroke-width: 1; }
-  .arm-plate .dim .ext { opacity: 0.45; stroke-dasharray: 4 3; }
-  .arm-plate .dim text { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; stroke: none; }
-
-  @media (max-width: 900px) {
-    .arm-plate { width: 400px; height: 231px; right: 3%; }
-    .plate-caption { font-size: 9px; }
-    .plate-caption { right: 3%; }
-  }
-  @media (max-width: 600px) {
-    .datum { height: 44px; }
-    .arm-plate { width: 310px; height: 179px; }
-    .plate-caption { right: 3%; }
-  }
-
-  /* PROJECTS */
-  #projects { background: var(--bg2); }
-  #experience { background: var(--bg2); }
-
-  .projects-controls {
-    display: flex; align-items: center; justify-content: space-between;
-    gap: 16px; margin-bottom: 32px; flex-wrap: wrap;
-  }
-  .proj-filters { display: flex; gap: 6px; flex-wrap: wrap; }
-  .proj-filter {
-    font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
-    padding: 7px 14px; border-radius: 3px; border: 1px solid var(--border);
-    background: transparent; color: var(--muted); cursor: pointer; transition: all 0.18s;
-    white-space: nowrap;
-  }
-  .proj-filter:hover { border-color: var(--border-hover); color: var(--text); }
-  .proj-filter.active { border-color: var(--accent); color: var(--accent); background: rgba(108,99,255,0.1); }
-
-  .proj-search {
-    font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em;
-    padding: 7px 14px; border-radius: 3px; border: 1px solid var(--border);
-    background: rgba(255,255,255,0.03); color: var(--text);
-    outline: none; transition: border-color 0.18s; width: 220px;
-  }
-  .proj-search::placeholder { color: var(--muted); opacity: 0.6; }
-  .proj-search:focus { border-color: var(--border-hover); }
-
-  .projects-empty {
-    display: none; grid-column: 1 / -1; text-align: center;
-    padding: 60px 0; font-family: var(--mono); font-size: 12px;
-    color: var(--muted); letter-spacing: 0.08em;
-  }
-  .projects-empty.visible { display: block; }
-
-  .project-card.hidden { display: none; }
-  .projects-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
-  .project-card {
-    background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 28px;
-    display: flex; flex-direction: column; gap: 16px;
-    transition: all 0.25s; position: relative;
-    cursor: pointer; text-decoration: none; color: inherit;
-  }
-  .project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--card-accent, var(--accent)); opacity: 0; transition: opacity 0.25s; }
-  .project-card:hover { border-color: var(--border-hover); transform: translateY(-3px); }
-  .project-card:hover::before { opacity: 1; }
-  .project-card.featured { grid-column: span 2; background: linear-gradient(135deg,var(--card) 0%,rgba(108,99,255,0.06) 100%); }
-  .project-icon {
-    width: 44px; height: 44px;
-    display: inline-flex; align-items: center; justify-content: center;
-    color: var(--card-accent, var(--accent));
-    background: rgba(255,255,255,0.025);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    transition: all 0.25s;
-    flex-shrink: 0;
-  }
-  .project-icon svg { width: 22px; height: 22px; display: block; }
-  .project-card:hover .project-icon {
-    background: color-mix(in srgb, var(--card-accent, var(--accent)) 14%, transparent);
-    border-color: color-mix(in srgb, var(--card-accent, var(--accent)) 45%, transparent);
-    transform: translateY(-1px);
-  }
-  .project-meta { display: flex; justify-content: space-between; align-items: flex-start; }
-  .project-type { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; background: rgba(255,255,255,0.05); color: var(--muted); }
-  .project-arrow { color: var(--muted); font-size: 18px; transition: all 0.2s; line-height: 1; }
-  .project-card:hover .project-arrow { color: var(--text); transform: translate(2px,-2px); }
-  h3.project-title { font-family: var(--display); font-size: 20px; font-weight: 700; letter-spacing: -0.01em; color: var(--text); line-height: 1.2; }
-  .project-desc { font-size: 14px; color: var(--muted); line-height: 1.65; flex: 1; }
-  .project-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding-top: 8px; border-top: 1px solid var(--border); }
-  .project-tag { font-family: var(--mono); font-size: 10px; padding: 3px 8px; border-radius: 2px; color: var(--muted); background: rgba(255,255,255,0.04); letter-spacing: 0.04em; }
-
-  /* PUBLICATIONS */
-  .pub-list { max-width: 760px; display: grid; gap: 20px; }
-  .timeline { display: flex; flex-direction: column; }
-  .timeline-item { display: grid; grid-template-columns: 120px 1fr; gap: 28px; padding: 30px 0; border-bottom: 1px solid var(--border); }
-  .timeline-item:first-child { padding-top: 0; }
-  .timeline-item:last-child { border-bottom: none; }
-  .timeline-date { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.06em; padding-top: 4px; text-align: right; line-height: 1.5; }
-  .timeline-content h3 { font-family: var(--display); font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-  .timeline-content .org { font-size: 13px; color: var(--accent2); font-family: var(--mono); margin-bottom: 12px; }
-  .timeline-content p { font-size: 14px; color: var(--muted); line-height: 1.65; }
-  .tl-bullets { list-style: none; display: flex; flex-direction: column; gap: 9px; }
-  .tl-bullets li { position: relative; padding-left: 18px; font-size: 14px; color: var(--muted); line-height: 1.6; }
-  .tl-bullets li::before { content: '▸'; position: absolute; left: 0; top: 0; color: var(--accent); font-size: 11px; }
-
-  .pub { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 24px; position: relative; overflow: hidden; }
-  .pub::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--accent2); }
-  .pub-title { font-family: var(--display); font-size: 17px; font-weight: 700; line-height: 1.32; color: var(--text); margin-bottom: 12px; }
-  .pub-authors { font-family: var(--mono); font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 4px; }
-  .pub-authors b { color: var(--text); font-weight: 500; }
-  .pub-venue { font-family: var(--mono); font-size: 11px; color: var(--accent2); letter-spacing: 0.03em; margin-bottom: 16px; }
-  .pub-desc { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 18px; }
-  .pub-link { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); text-decoration: none; transition: color 0.2s; }
-  .pub-link:hover { color: var(--text); }
-
-  /* CONTACT */
-  #contact { background: var(--bg2); text-align: center; padding-bottom: 120px; }
-  .contact-inner { max-width: 640px; margin: 0 auto; }
-  .contact-inner p { color: var(--muted); font-size: 17px; margin-bottom: 40px; line-height: 1.7; }
-  .contact-links { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-  .contact-link { display: flex; align-items: center; gap: 10px; padding: 14px 24px; border: 1px solid var(--border); border-radius: 6px; text-decoration: none; color: var(--muted); font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; transition: all 0.2s; }
-  .contact-link:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
-
-  /* FOOTER */
-  footer { padding: 32px 80px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; }
-  footer span { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.06em; }
-
-  /* ANIMATIONS */
-  .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
-  .fade-in.visible { opacity: 1; transform: translateY(0); }
-  .section-divider { width: 100%; height: 1px; background: linear-gradient(to right,transparent,var(--border-hover),transparent); }
-
-  /* Cursor */
-  * { cursor: none !important; }
-  .cursor-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); box-shadow: 0 0 12px var(--accent); transition: left 0.05s, top 0.05s; }
-
-  /* ── DETECTION / PERCEPTION THEME ── */
-  /* reusable corner brackets (a CV bounding-box reticle) */
-  .det-corner { position: absolute; width: 16px; height: 16px; border: 2px solid var(--bracket, var(--accent2)); pointer-events: none; }
-  .det-corner.tl { top: -7px; left: -7px; border-right: 0; border-bottom: 0; }
-  .det-corner.tr { top: -7px; right: -7px; border-left: 0; border-bottom: 0; }
-  .det-corner.bl { bottom: -7px; left: -7px; border-right: 0; border-top: 0; }
-  .det-corner.br { bottom: -7px; right: -7px; border-left: 0; border-top: 0; }
-  .det-tag {
-    position: absolute; top: -28px; left: -7px;
-    font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
-    white-space: nowrap; color: var(--bracket, var(--accent2));
-    background: color-mix(in srgb, var(--bracket, var(--accent2)) 12%, transparent);
-    border: 1px solid color-mix(in srgb, var(--bracket, var(--accent2)) 35%, transparent);
-    padding: 2px 8px; border-radius: 2px;
-  }
-
-  .hero-namebox { display: inline-block; margin-top: 14px; margin-bottom: 30px; }
-  .hero-namebox .hero-name { margin-bottom: 0; }
-
-  /* PROJECT SPOTLIGHT — auto-cycling object detector */
-  .projects-grid.spotlight .project-card:not(.focused) { opacity: 0.4; filter: saturate(0.5); }
-  .project-card.focused {
-    opacity: 1;
-    border-color: color-mix(in srgb, var(--card-accent, var(--accent)) 55%, transparent);
-    box-shadow: 0 0 0 1px color-mix(in srgb, var(--card-accent,var(--accent)) 40%, transparent),
-                0 18px 50px -14px color-mix(in srgb, var(--card-accent,var(--accent)) 50%, transparent);
-    transform: translateY(-3px) scale(1.015);
-    z-index: 3;
-  }
-  .project-card.focused::before { opacity: 1; }
-  /* per-card brackets sit inside the padding (card clips overflow) */
-  .project-card .det-corner { --bracket: var(--card-accent, var(--accent)); opacity: 0; transition: opacity 0.25s; }
-  .project-card .det-corner.tl { top: 12px; left: 12px; }
-  .project-card .det-corner.tr { top: 12px; right: 12px; }
-  .project-card .det-corner.bl { bottom: 12px; left: 12px; }
-  .project-card .det-corner.br { bottom: 12px; right: 12px; }
-  .project-card.focused .det-corner { opacity: 1; }
-  .project-card .det-tag { --bracket: var(--card-accent, var(--accent)); top: calc(100% + 8px); bottom: auto; left: -1px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; opacity: 0; transition: opacity 0.25s; z-index: 4; }
-  .project-card.focused .det-tag { opacity: 1; }
-  /* scanline sweep + dwell timer */
-  .project-card .scanline { position: absolute; left: 0; right: 0; top: 0; height: 2px; opacity: 0; pointer-events: none;
-    background: linear-gradient(90deg, transparent, var(--card-accent,var(--accent)), transparent); }
-  .project-card.focused .scanline { animation: scan 2.6s ease-in-out infinite; }
-  @keyframes scan { 0% { top: 0; opacity: 0; } 12% { opacity: 0.85; } 86% { opacity: 0.85; } 100% { top: 100%; opacity: 0; } }
-  .project-card .focus-progress { position: absolute; bottom: 0; left: 0; height: 2px; width: 0; opacity: 0; background: var(--card-accent,var(--accent)); }
-  .project-card.focused .focus-progress { opacity: 0.8; animation: dwell 4s linear forwards; }
-  @keyframes dwell { from { width: 0; } to { width: 100%; } }
-
-  @media (prefers-reduced-motion: reduce) {
-    .project-card.focused .scanline, .project-card.focused .focus-progress { animation: none; }
-  }
-
-  /* RESPONSIVE */
-  @media (max-width: 900px) {
-    nav { padding: 0 24px; }
-    .hero, section { padding: 80px 32px 60px; }
-    .hero { padding-bottom: 320px; }  /* keep the scene clear of the hero copy */
-    footer { padding: 24px 32px; }
-    .stack-grid { grid-template-columns: 1fr; gap: 26px; }
-    .projects-grid { grid-template-columns: 1fr 1fr; }
-    .project-card.featured { grid-column: span 2; }
-    h1.hero-name { font-size: 56px; }
-  }
-  @media (max-width: 600px) {
-    .projects-grid { grid-template-columns: 1fr; }
-    .project-card.featured { grid-column: span 1; }
-    .timeline-item { grid-template-columns: 1fr; gap: 8px; }
-    .timeline-date { text-align: left; }
-    .nav-links { display: none; }
-    h1.hero-name { font-size: 44px; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .fade-in { opacity: 1; transform: none; transition: none; }
-    html { scroll-behavior: auto; }
-  }
-</style>
-<link rel="stylesheet" href="assets/theme.css">
+<title>Andre Arante</title>
+<meta name="description" content="Andre Arante: CV. Electrical & Computer Engineering at GWU; robot learning, computer vision, and reinforcement learning.">
 <script src="assets/theme.js"></script>
+<link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
 
-<div class="sky-glow" aria-hidden="true"></div>
-<canvas id="sky-canvas" aria-hidden="true"></canvas>
-
-<div class="cursor-dot" id="cursor"></div>
-
 <nav>
-  <a class="nav-logo" href="#">aa.dev</a>
-  <ul class="nav-links">
-    <li><a href="#stack">Stack</a></li>
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#experience">Publications</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="photography.html" style="color:var(--accent2)">Photography ↗</a></li>
-  </ul>
+  <div class="nav-inner">
+    <a class="nav-name" href="./">Andre Arante</a>
+    <ul class="nav-links">
+      <li><a href="./" aria-current="page">CV</a></li>
+      <li><a href="portfolio.html">Portfolio</a></li>
+      <li><a href="publications.html">Publications</a></li>
+      <li><a href="photography.html">Photography</a></li>
+    </ul>
+  </div>
 </nav>
 
-<section class="hero">
-  <div class="scene" aria-hidden="true">
-    <div class="observatory" aria-hidden="true">
-      <div class="haze"></div>
-      <svg class="ground" viewBox="0 0 1200 150" preserveAspectRatio="none">
-        <defs>
-          <linearGradient id="gnd" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#0a0a12"/>
-            <stop offset="1" stop-color="#111118"/>
-          </linearGradient>
-          <!-- cream-theme counterpart (see assets/theme.css) -->
-          <linearGradient id="gnd-light" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#c2b9a6"/>
-            <stop offset="1" stop-color="#d0c9b9"/>
-          </linearGradient>
-        </defs>
-        <!-- far ridge -->
-        <path class="gnd-far" d="M0,72 C260,54 430,80 660,62 C880,46 1040,74 1200,58 L1200,150 L0,150 Z" fill="#0c0c16"/>
-        <!-- near ground (blends down into the Projects section bg) -->
-        <path class="gnd-near" d="M0,98 C220,82 420,110 640,92 C860,74 1020,106 1200,88 L1200,150 L0,150 Z" fill="url(#gnd)"/>
-        <path class="gnd-edge" d="M0,98 C220,82 420,110 640,92 C860,74 1020,106 1200,88" fill="none" stroke="rgba(0,212,170,0.22)" stroke-width="1.5"/>
-      </svg>
-      <svg class="telescope" viewBox="0 0 420 320" preserveAspectRatio="xMidYMax meet">
-        <defs>
-          <linearGradient id="scope-beam" x1="0" y1="1" x2="1" y2="0">
-            <stop offset="0" stop-color="rgba(0,212,170,0)"/>
-            <stop offset="1" stop-color="rgba(0,212,170,0.6)"/>
-          </linearGradient>
-          <radialGradient id="lens-glow" cx="0.5" cy="0.5" r="0.5">
-            <stop offset="0" stop-color="rgba(0,212,170,0.9)"/>
-            <stop offset="1" stop-color="rgba(0,212,170,0)"/>
-          </radialGradient>
-          <filter id="scope-glow" x="-300%" y="-300%" width="700%" height="700%">
-            <feGaussianBlur stdDeviation="2.8" result="b"/>
-            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-        </defs>
+<div class="page">
+  <aside class="sidebar">
+    <!-- Drop a square photo at assets/headshot.jpg and it replaces the initials. -->
+    <div class="avatar"><img src="assets/headshot.jpg" alt="Andre Arante" onerror="this.remove()"><span>AA</span></div>
+    <h3 class="author-name">Andre Arante</h3>
+    <p class="author-bio">Computer Engineering @ GWU, Class of '27. Computer vision, RL, and robotics.</p>
+    <ul class="author-links">
+      <li><a href="mailto:andrearante12@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>Email</a></li>
+      <li><a href="https://github.com/andrearante12" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 00-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 015.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.4-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0012 .5z"/></svg>GitHub</a></li>
+      <li><a href="https://www.linkedin.com/in/andre-arante" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 110-4.13 2.06 2.06 0 010 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>LinkedIn</a></li>
+      <li><a href="resume/resume.pdf?v=20261102" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>Resume</a></li>
+    </ul>
+  </aside>
 
-        <!-- target star + sight line the scope is aimed at -->
-        <line x1="346" y1="49" x2="369" y2="23" stroke="url(#scope-beam)" stroke-width="2.5" opacity="0.65"/>
-        <circle cx="372" cy="19" r="4" fill="#fff" filter="url(#scope-glow)"/>
+  <main>
+    <section>
+      <h1 class="section-title">CV</h1>
+      <p class="cv-lead">Electrical &amp; Computer Engineering at GWU, working on robot learning, computer vision, and reinforcement learning. Full version: <a href="resume/resume.pdf?v=20261102" target="_blank" rel="noopener">resume (PDF)</a>.</p>
+    </section>
 
-        <!-- ground contact shadow -->
-        <ellipse cx="232" cy="304" rx="78" ry="9" fill="#000" opacity="0.45"/>
-
-        <!-- tripod -->
-        <g stroke="#10101c" stroke-width="7" stroke-linecap="round">
-          <line x1="230" y1="186" x2="176" y2="300"/>
-          <line x1="230" y1="186" x2="290" y2="300"/>
-          <line x1="232" y1="190" x2="238" y2="306"/>
-        </g>
-        <!-- accent rim light down the front legs -->
-        <g stroke="rgba(0,212,170,0.30)" stroke-width="1.6" stroke-linecap="round">
-          <line x1="228" y1="190" x2="178" y2="296"/>
-          <line x1="232" y1="190" x2="288" y2="296"/>
-        </g>
-        <!-- accessory tray -->
-        <path d="M196,250 L264,250 L256,262 L204,262 Z" fill="#0e0e18"/>
-
-        <!-- equatorial mount head + counterweight -->
-        <rect x="212" y="168" width="36" height="26" rx="6" fill="#13131f" stroke="rgba(108,99,255,0.3)" stroke-width="1.5"/>
-        <line x1="240" y1="190" x2="272" y2="224" stroke="#13131f" stroke-width="6" stroke-linecap="round"/>
-        <circle cx="275" cy="227" r="9" fill="#15152200" stroke="rgba(108,99,255,0.4)" stroke-width="2"/>
-        <circle cx="275" cy="227" r="9" fill="#131320"/>
-
-        <!-- optical tube assembly, aimed up at the star -->
-        <g transform="rotate(-48 230 178)">
-          <!-- dovetail + tube rings -->
-          <rect x="206" y="190" width="118" height="8" rx="3" fill="#0e0e18"/>
-          <rect x="236" y="168" width="9" height="32" rx="3" fill="#0e0e18"/>
-          <rect x="300" y="168" width="9" height="32" rx="3" fill="#0e0e18"/>
-          <!-- main tube -->
-          <rect x="214" y="163" width="172" height="30" rx="15" fill="#13131f"/>
-          <!-- dew shield + objective lens (front, up-sky end) -->
-          <rect x="378" y="159" width="28" height="38" rx="9" fill="#16162c"/>
-          <ellipse cx="404" cy="178" rx="6" ry="16" fill="url(#lens-glow)"/>
-          <ellipse cx="404" cy="178" rx="6" ry="16" fill="none" stroke="rgba(0,212,170,0.55)" stroke-width="1.5"/>
-          <!-- rim light along the top edge -->
-          <path d="M220,164 H398" fill="none" stroke="rgba(0,212,170,0.4)" stroke-width="1.6" stroke-linecap="round"/>
-          <path d="M222,192 H384" fill="none" stroke="rgba(108,99,255,0.25)" stroke-width="1.4" stroke-linecap="round"/>
-          <!-- focuser + eyepiece (back, eye end) -->
-          <rect x="206" y="180" width="16" height="24" rx="3" fill="#10101c"/>
-          <rect x="200" y="200" width="22" height="11" rx="3" fill="#13131f"/>
-          <!-- finder scope -->
-          <rect x="270" y="148" width="74" height="9" rx="4" fill="#0e0e18"/>
-          <rect x="340" y="146" width="8" height="13" rx="2" fill="#10101c"/>
-          <line x1="286" y1="157" x2="286" y2="163" stroke="#0e0e18" stroke-width="4"/>
-          <line x1="326" y1="157" x2="326" y2="163" stroke="#0e0e18" stroke-width="4"/>
-        </g>
-      </svg>
-    </div>
-    <!-- cream theme: the same corner of the page, drawn as a drafting sheet -->
-    <div class="plate">
-      <div class="datum"></div>
-      <canvas id="so101-canvas" class="arm-3d"></canvas>
-      <svg class="arm-plate" viewBox="0 0 520 300" preserveAspectRatio="xMidYMax meet">
-        <defs>
-          <linearGradient id="arm-body" x1="0" y1="0" x2="0.4" y2="1">
-            <stop offset="0" stop-color="#4e4736"/>
-            <stop offset="1" stop-color="#332e23"/>
-          </linearGradient>
-          <linearGradient id="arm-base" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#4a4433"/>
-            <stop offset="1" stop-color="#2b271d"/>
-          </linearGradient>
-          <radialGradient id="arm-led" cx="0.5" cy="0.5" r="0.5">
-            <stop offset="0" stop-color="#2a6d5d" stop-opacity="0.9"/>
-            <stop offset="1" stop-color="#2a6d5d" stop-opacity="0"/>
-          </radialGradient>
-        </defs>
-
-        <!-- drafting overlay, kept quiet so the model reads first -->
-        <g class="dim">
-          <line class="ext" x1="404" y1="60" x2="404" y2="34"/>
-          <line x1="208" y1="28" x2="404" y2="28"/>
-          <line x1="204" y1="34" x2="212" y2="22"/>
-          <line x1="400" y1="34" x2="408" y2="22"/>
-          <text x="306" y="18" text-anchor="middle">480</text>
-          <line class="ext" x1="428" y1="86" x2="486" y2="86"/>
-          <line x1="480" y1="86" x2="480" y2="298"/>
-          <line x1="474" y1="92" x2="486" y2="80"/>
-          <line x1="474" y1="298" x2="486" y2="286"/>
-          <text x="472" y="196" text-anchor="middle" transform="rotate(-90 472 196)">620</text>
-        </g>
-        <line x1="208" y1="120" x2="208" y2="306" stroke="#2a6d5d" stroke-width="1" opacity="0.4" stroke-dasharray="14 5 2 5"/>
-
-        <!-- contact shadow on the datum -->
-        <ellipse cx="206" cy="298" rx="88" ry="9" fill="#8d836c" opacity="0.35"/>
-
-        <!-- ── plinth ── -->
-        <path d="M152,298 L260,298 L260,262 Q260,257 255,257 L157,257 Q152,257 152,262 Z" fill="url(#arm-base)"/>
-        <path d="M157,257 L255,257 Q260,257 260,262 L260,266 L152,266 L152,262 Q152,257 157,257 Z" fill="#57503d"/>
-        <path d="M158,259 L254,259" stroke="rgba(247,242,232,0.30)" stroke-width="1.5" stroke-linecap="round"/>
-        <g fill="#241f18" opacity="0.7">
-          <circle cx="166" cy="288" r="2.6"/><circle cx="246" cy="288" r="2.6"/>
-          <circle cx="166" cy="274" r="2.6"/><circle cx="246" cy="274" r="2.6"/>
-        </g>
-
-        <!-- ── rotating turret ── -->
-        <path d="M176,257 L236,257 L236,214 Q236,208 230,208 L182,208 Q176,208 176,214 Z" fill="url(#arm-body)"/>
-        <ellipse cx="206" cy="209" rx="30" ry="8" fill="#544c3a"/>
-        <path d="M180,212 Q206,203 232,212" fill="none" stroke="rgba(247,242,232,0.32)" stroke-width="1.6" stroke-linecap="round"/>
-        <rect x="184" y="228" width="38" height="15" rx="3" fill="#241f18" opacity="0.4"/>
-        <circle cx="230" cy="236" r="9" fill="url(#arm-led)"/>
-        <circle cx="230" cy="236" r="2.6" fill="#2a6d5d"/>
-
-        <!-- ── shoulder yoke ── -->
-        <path d="M188,214 L226,214 L221,176 L193,176 Z" fill="#4a4335"/>
-        <path d="M193,176 L221,176 L220,182 L194,182 Z" fill="rgba(247,242,232,0.16)"/>
-
-        <!-- cable, running behind the arm -->
-        <path d="M220,206 C 240,196 236,172 252,150 C 264,134 272,120 280,110" fill="none" stroke="#9c5a22" stroke-width="2.2" opacity="0.45" stroke-linecap="round"/>
-
-        <!-- ── upper arm ── -->
-        <line x1="207" y1="170" x2="286" y2="92" stroke="#332e23" stroke-width="42" stroke-linecap="round"/>
-        <line x1="207" y1="170" x2="286" y2="92" stroke="url(#arm-body)" stroke-width="34" stroke-linecap="round"/>
-        <line x1="197" y1="160" x2="276" y2="82" stroke="rgba(247,242,232,0.30)" stroke-width="3.5" stroke-linecap="round"/>
-        <g stroke="#241f18" stroke-width="1.6" opacity="0.4">
-          <line x1="230" y1="141" x2="248" y2="159"/>
-          <line x1="245" y1="126" x2="263" y2="144"/>
-        </g>
-
-        <!-- ── forearm ── -->
-        <line x1="286" y1="92" x2="384" y2="72" stroke="#332e23" stroke-width="32" stroke-linecap="round"/>
-        <line x1="286" y1="92" x2="384" y2="72" stroke="url(#arm-body)" stroke-width="25" stroke-linecap="round"/>
-        <line x1="290" y1="80" x2="380" y2="62" stroke="rgba(247,242,232,0.28)" stroke-width="3" stroke-linecap="round"/>
-        <line x1="332" y1="76" x2="336" y2="96" stroke="#241f18" stroke-width="1.6" opacity="0.4"/>
-
-        <!-- ── joints, drawn over the links so the axes read ── -->
-        <g>
-          <circle cx="207" cy="170" r="21" fill="#443d2f"/>
-          <circle cx="207" cy="170" r="13" fill="#57503d"/>
-          <circle cx="207" cy="170" r="4.5" fill="#9c5a22"/>
-          <path d="M193,159 A 21,21 0 0 1 213,150" fill="none" stroke="rgba(247,242,232,0.35)" stroke-width="2" stroke-linecap="round"/>
-
-          <circle cx="286" cy="92" r="18" fill="#443d2f"/>
-          <circle cx="286" cy="92" r="11" fill="#57503d"/>
-          <circle cx="286" cy="92" r="4" fill="#9c5a22"/>
-          <path d="M274,83 A 18,18 0 0 1 292,75" fill="none" stroke="rgba(247,242,232,0.35)" stroke-width="2" stroke-linecap="round"/>
-
-          <circle cx="384" cy="72" r="13" fill="#443d2f"/>
-          <circle cx="384" cy="72" r="7" fill="#57503d"/>
-          <circle cx="384" cy="72" r="2.6" fill="#9c5a22"/>
-        </g>
-
-        <!-- eye-in-hand camera, mounted on the forearm behind the wrist -->
-        <g transform="rotate(-11 352 60)">
-          <rect x="340" y="46" width="24" height="16" rx="3" fill="#3a3428"/>
-          <rect x="340" y="46" width="24" height="4" rx="2" fill="rgba(247,242,232,0.22)"/>
-          <rect x="360" y="50" width="7" height="9" rx="2" fill="#2c281f"/>
-          <circle cx="366" cy="54.5" r="2.8" fill="#2a6d5d"/>
-          <circle cx="366" cy="54.5" r="1.1" fill="#d7ece5"/>
-        </g>
-
-        <!-- ── two-finger gripper: jaw, lower finger, the part, upper finger ── -->
-        <g transform="rotate(-11 400 70)">
-          <rect x="392" y="58" width="20" height="26" rx="4" fill="url(#arm-body)"/>
-          <rect x="392" y="58" width="20" height="5" rx="2.5" fill="rgba(247,242,232,0.20)"/>
-        </g>
-        <line x1="412" y1="80" x2="448" y2="73" stroke="#3a3428" stroke-width="6.5" stroke-linecap="round"/>
-        <g transform="rotate(-11 452 63)">
-          <rect x="438" y="49" width="27" height="27" rx="3" fill="#cfc7b3" stroke="#2c281f" stroke-width="1.6"/>
-          <path d="M438,58 L465,58" stroke="#2c281f" stroke-width="1" opacity="0.35"/>
-        </g>
-        <line x1="410" y1="57" x2="446" y2="50" stroke="#3a3428" stroke-width="6.5" stroke-linecap="round"/>
-        <line x1="412" y1="55" x2="442" y2="49" stroke="rgba(247,242,232,0.22)" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-      <p class="plate-caption">FIG. 1 — SO-ARM101 · 6-DOF MANIPULATOR · LIVE MODEL</p>
-    </div>
-  </div>
-
-  <div class="hero-content">
-    <p class="hero-eyebrow">Computer Engineering @ GWU · Class of '27</p>
-    <div class="hero-namebox">
-      <h1 class="hero-name">Andre<br><span class="accent-word">Arante</span></h1>
-    </div>
-    <p class="hero-tagline">Focused on <strong>computer vision</strong>, <strong>reinforcement learning</strong>, and <strong>robotic systems</strong> — from simulation to hardware. I research <strong>safe autonomous landing for UAS</strong> at GWU's Intelligent Aerospace Systems Lab.</p>
-    <div class="hero-cta">
-      <a class="btn btn-primary" href="resume/resume.pdf?v=a31fa63" target="_blank" rel="noopener">Resume ↗</a>
-      <a class="btn btn-ghost" href="#projects">View Projects</a>
-      <a class="btn btn-ghost" href="https://github.com/andrearante12" target="_blank" rel="noopener">GitHub →</a>
-      <a class="btn btn-ghost" href="https://www.linkedin.com/in/andre-arante" target="_blank" rel="noopener">LinkedIn →</a>
-    </div>
-
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<section id="projects">
-  <p class="section-label">Work</p>
-  <h2 class="section-title">Projects</h2>
-
-  <div class="projects-controls">
-    <div class="proj-filters">
-      <button class="proj-filter active" data-filter="all" onclick="filterProjects('all',this)">All</button>
-      <button class="proj-filter" data-filter="robotics" onclick="filterProjects('robotics',this)">Robotics</button>
-      <button class="proj-filter" data-filter="rl" onclick="filterProjects('rl',this)">Reinforcement Learning</button>
-      <button class="proj-filter" data-filter="embedded" onclick="filterProjects('embedded',this)">Embedded Systems</button>
-    </div>
-    <input class="proj-search" type="text" placeholder="Search projects..." oninput="searchProjects(this.value)">
-  </div>
-
-  <div class="projects-grid" id="projects-grid"></div>
-</section>
-
-<div class="section-divider"></div>
-
-<section id="experience">
-  <p class="section-label">Research</p>
-  <h2 class="section-title">Publications</h2>
-  <div class="pub-list">
-    <article class="pub fade-in">
-      <h3 class="pub-title">Open-Vocabulary Obstruction Detection for UAS Landing via Fine-Tuned YOLO-World</h3>
-      <p class="pub-authors"><b>Andre Arante</b>, Mahyar Ghazanfari, Can Vu, Peng Wei</p>
-      <p class="pub-venue">George Washington University · In submission — AIAA SciTech 2027</p>
-      <p class="pub-desc">Safe autonomous landing remains a critical challenge for package-delivery UAS, where an undetected obstruction in the landing zone poses a serious hazard. Traditional closed-set object detectors only recognize the fixed classes they were trained on, so they can't generalize to the arbitrary obstacles found in real-world deployment. We instead propose <b>open-vocabulary detection</b>: fine-tuning YOLO-World on the VisDrone aerial dataset while freezing the CLIP text encoder to preserve zero-shot generalization to novel obstacle types queryable in natural language.</p>
-    </article>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<section id="stack">
-  <p class="section-label">Toolkit</p>
-  <div class="stack-grid fade-in">
-    <div>
-      <p class="stack-group-label">ML / AI</p>
-      <div class="tags">
-        <span class="tag active">Reinforcement Learning (SB3)</span><span class="tag active">PyTorch</span>
-        <span class="tag">TensorFlow</span><span class="tag">PPO</span>
+    <section>
+      <h2 class="section-title">Education</h2>
+      <div class="cv-entry">
+        <div class="cv-head"><h3 class="cv-title">The George Washington University</h3><span class="cv-date">Aug 2023 – May 2027</span></div>
+        <p class="cv-sub"><span>B.S. Electrical and Computer Engineering, AI and Robotics Track; Minor in Computer Science</span><span>Washington, DC</span></p>
       </div>
-    </div>
-    <div>
-      <p class="stack-group-label">Robotics</p>
-      <div class="tags">
-        <span class="tag active">ROS2</span><span class="tag">MoveIt2</span>
-        <span class="tag">Jetson Orin / Xavier</span><span class="tag">MuJoCo</span>
-        <span class="tag">Robotic Arm</span><span class="tag">UGV</span>
-      </div>
-    </div>
-    <div>
-      <p class="stack-group-label">Languages &amp; Tools</p>
-      <div class="tags">
-        <span class="tag active">Python</span><span class="tag active">C/C++</span>
-        <span class="tag">Java</span><span class="tag">JavaScript</span>
-        <span class="tag">Flask / Django</span><span class="tag">React</span>
-        <span class="tag">Docker</span><span class="tag">Linux</span>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<section id="contact">
-  <div class="contact-inner fade-in">
-    <p class="section-label" style="justify-content:center">Contact</p>
-    <h2 class="section-title">Let's talk</h2>
-    <p>I'm always open to research collaborations, internship opportunities, and conversations about robotics, CV, or RL.</p>
-    <div class="contact-links">
-      <a class="contact-link" href="mailto:andrearante12@gmail.com">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        Email
-      </a>
-    </div>
-    <div style="margin-top:48px; padding-top:40px; border-top:1px solid var(--border);">
-      <p style="font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:16px;">Also check my photography page!</p>
-      <a href="photography.html" style="display:inline-flex;align-items:center;gap:12px;padding:16px 28px;border:1px solid var(--border);border-radius:6px;text-decoration:none;color:var(--accent2);font-family:var(--mono);font-size:12px;letter-spacing:0.06em;text-transform:uppercase;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--accent2)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform=''">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
-        Photography ↗
-      </a>
-    </div>
-  </div>
-</section>
+    <section>
+      <h2 class="section-title">Work Experience</h2>
+      <div class="cv-entry">
+        <div class="cv-head"><h3 class="cv-title">Robotics and AI Engineer Contractor</h3><span class="cv-date">Oct 2026 – Present</span></div>
+        <p class="cv-sub"><span>AIM Robotics, Inc</span><span>Herndon, VA</span></p>
+      </div>
+      <div class="cv-entry">
+        <div class="cv-head"><h3 class="cv-title">Software Engineering Intern</h3><span class="cv-date">May 2026 – Aug 2026</span></div>
+        <p class="cv-sub"><span>Dell Technologies</span><span>Austin, TX</span></p>
+      </div>
+      <div class="cv-entry">
+        <div class="cv-head"><h3 class="cv-title">Undergraduate Research Intern</h3><span class="cv-date">Sep 2025 – Present</span></div>
+        <p class="cv-sub"><span>Intelligent Aerospace Systems Lab, The George Washington University</span><span>Washington, DC</span></p>
+      </div>
+      <div class="cv-entry">
+        <div class="cv-head"><h3 class="cv-title">Software Engineering Intern</h3><span class="cv-date">Feb 2024 – Feb 2025</span></div>
+        <p class="cv-sub"><span>C-3 Comm Systems, LLC</span><span>Bethesda, MD</span></p>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Publications</h2>
+      <ol class="cv-entry" style="padding-left:20px;font-size:15px">
+        <li><b>A. Arante</b>, M. Ghazanfari, C. Vu, and P. Wei, “<a href="projects/uas-detection.html">Open-Vocabulary Obstruction Detection for UAS Landing via Fine-Tuned YOLO-World</a>,” accepted to <i>AIAA SciTech 2027</i>.</li>
+      </ol>
+      <p class="more"><a href="publications.html">All publications →</a></p>
+    </section>
+
+    <section>
+      <h2 class="section-title">Selected Projects</h2>
+      <div class="cv-entry">
+        <div class="cv-head"><h3 class="cv-title"><a href="projects/sortbots.html">SortBots</a></h3></div>
+        <p class="cv-sub"><span>Senior Capstone, sponsored by C-3 Comm Systems</span><span></span></p>
+      </div>
+      <div class="cv-entry">
+        <div class="cv-head"><h3 class="cv-title"><a href="projects/imitationarm/index.html">ImitationArm</a></h3></div>
+        <p class="cv-sub"><span>Robotic Arm Teleoperation Device</span><span></span></p>
+      </div>
+      <p class="more"><a href="portfolio.html">Full portfolio →</a></p>
+    </section>
+
+    <section>
+      <h2 class="section-title">Technical Skills</h2>
+      <dl class="cv-skills">
+        <dt>ML &amp; Robotics</dt>
+        <dd>PyTorch, CUDA, fine-tuning, imitation learning, motion planning, SLAM, vision-language-action models, reinforcement learning, Weights &amp; Biases, NVIDIA Jetson, Linux, 3D Printing, CAD, Isaac Sim, LeRobot</dd>
+        <dt>Languages &amp; Libraries</dt>
+        <dd>C++, Python, C, MATLAB, C#, Java, ROS 2 (Nav2, MoveIt2), MuJoCo, OpenCV, SQL, AWS</dd>
+      </dl>
+    </section>
+  </main>
+</div>
 
 <footer>
-  <span>© 2026 Andre Arante</span>
-  <span>GWU · Computer Engineering · Class of '27</span>
+  <div class="nav-inner">© 2026 Andre Arante</div>
 </footer>
-
-<script src="assets/icons.js"></script>
-<script type="module" src="assets/hero-bg.js"></script>
-<script type="module" src="assets/so101.js"></script>
-<script>
-/* ── PROJECT FILTER / SEARCH ── */
-let activeFilter = 'all';
-let activeSearch = '';
-
-function applyProjectVisibility() {
-  const cards = document.querySelectorAll('.project-card');
-  let visible = 0;
-  cards.forEach(card => {
-    const categoryMatch = activeFilter === 'all' || card.dataset.category === activeFilter;
-    const searchMatch = !activeSearch || card.textContent.toLowerCase().includes(activeSearch);
-    const show = categoryMatch && searchMatch;
-    card.classList.toggle('hidden', !show);
-    if (show) visible++;
-  });
-  document.getElementById('projects-empty').classList.toggle('visible', visible === 0);
-}
-
-function filterProjects(filter, btn) {
-  activeFilter = filter;
-  document.querySelectorAll('.proj-filter').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  applyProjectVisibility();
-}
-
-function searchProjects(query) {
-  activeSearch = query.trim().toLowerCase();
-  applyProjectVisibility();
-}
-
-/* ── CURSOR ── */
-const cursor = document.getElementById('cursor');
-document.addEventListener('mousemove', e => {
-  cursor.style.left = e.clientX + 'px';
-  cursor.style.top = e.clientY + 'px';
-});
-
-/* ── FADE IN ── */
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const siblings = Array.from(entry.target.parentElement.children).filter(el => el.classList.contains('fade-in'));
-      setTimeout(() => entry.target.classList.add('visible'), 80 * siblings.indexOf(entry.target));
-      observer.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.1 });
-
-document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-/* ── NAV ACTIVE ── */
-const sections = document.querySelectorAll('section[id]');
-const navLinks = document.querySelectorAll('.nav-links a');
-window.addEventListener('scroll', () => {
-  let current = '';
-  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.id; });
-  navLinks.forEach(a => { a.style.color = a.getAttribute('href') === '#' + current ? 'var(--text)' : ''; });
-});
-
-/* ── RENDER PROJECT CARDS from projects.json, then start the spotlight ── */
-(async function renderProjects() {
-  const grid = document.getElementById('projects-grid');
-  if (!grid) return;
-  let list = [];
-  try {
-    const res = await fetch('projects.json', { cache: 'no-cache' });
-    list = await res.json();
-  } catch (e) {
-    grid.innerHTML = '<p style="grid-column:1/-1;font-family:var(--mono);color:var(--muted);text-align:center;padding:40px 0;">Could not load projects.</p>';
-    return;
-  }
-  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
-  const ICONS = window.SITE_ICONS || {};
-  const card = p => {
-    const icon = ICONS[p.icon] || ICONS.default || '';
-    const tags = (p.cardTags || []).map(t => `<span class="project-tag">${esc(t)}</span>`).join('');
-    // `site` = a full write-up hosted in this repo, and it outranks the
-    // GitHub link: it is the better landing page when one exists.
-    const href = p.site || p.github || `projects/${p.slug}.html`;
-    const ext = (!p.site && p.github) ? ' target="_blank" rel="noopener"' : '';
-    return `<a class="project-card fade-in" data-category="${esc(p.category)}" style="--card-accent:${esc(p.accent || '#6c63ff')}" href="${esc(href)}"${ext}>
-      <div class="project-icon" aria-hidden="true">${icon}</div>
-      <div class="project-meta"><span class="project-type">${esc(p.type)}</span><span class="project-arrow">↗</span></div>
-      <h3 class="project-title">${esc(p.title)}</h3>
-      <p class="project-desc">${esc(p.cardBlurb)}</p>
-      <div class="project-tags">${tags}</div>
-    </a>`;
-  };
-  grid.innerHTML = list.filter(p => !p.research).map(card).join('') +
-    '<div class="projects-empty" id="projects-empty">No projects match your search.</div>';
-  grid.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-  initSpotlight();
-})();
-
-/* ── PROJECT SPOTLIGHT — auto-cycling object detector ── */
-function initSpotlight() {
-  const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const grid = document.querySelector('.projects-grid');
-  const cards = Array.from(document.querySelectorAll('.project-card'));
-  if (!grid || !cards.length || RM) return;
-  const DWELL = 4000;
-
-  cards.forEach(c => {
-    ['tl', 'tr', 'bl', 'br'].forEach(p => {
-      const b = document.createElement('span'); b.className = 'det-corner ' + p; c.appendChild(b);
-    });
-    const tag = document.createElement('span'); tag.className = 'det-tag'; c.appendChild(tag);
-    c.appendChild(Object.assign(document.createElement('span'), { className: 'scanline' }));
-    c.appendChild(Object.assign(document.createElement('span'), { className: 'focus-progress' }));
-    c._tag = tag;
-  });
-
-  let started = false, paused = false;
-  const visible = () => cards.filter(c => !c.classList.contains('hidden'));
-
-  // Dark reads as a detector confidence readout; cream reads as a figure
-  // number on a drawing sheet. Re-labelled live when the theme flips.
-  function labelTag(c) {
-    if (!c || !c._tag) return;
-    const title = (c.querySelector('.project-title') || {}).textContent || 'project';
-    const i = cards.indexOf(c);
-    if (document.documentElement.getAttribute('data-theme') === 'light') {
-      c._tag.textContent = 'FIG. ' + String(i + 2).padStart(2, '0') + ' · ' + title.toUpperCase();
-    } else {
-      c._tag.textContent = '◉ ' + title + ' · ' + (0.90 + (i % 9) / 100).toFixed(2);
-    }
-  }
-  window.addEventListener('themechange', () => cards.forEach(c => {
-    if (c.classList.contains('focused')) labelTag(c);
-  }));
-
-  function setFocus(c) {
-    cards.forEach(x => x.classList.remove('focused'));
-    if (!c) return;
-    c.classList.add('focused');
-    labelTag(c);
-    const bar = c.querySelector('.focus-progress');
-    if (bar) { bar.style.animation = 'none'; void bar.offsetWidth; bar.style.animation = ''; }
-  }
-
-  function advance() {
-    const vis = visible();
-    if (!vis.length) return;
-    const cur = vis.findIndex(c => c.classList.contains('focused'));
-    setFocus(vis[(cur + 1) % vis.length]);
-  }
-
-  function start() {
-    if (started) return;
-    started = true;
-    grid.classList.add('spotlight');
-    setFocus(visible()[0]);
-    setInterval(() => { if (!paused && !document.hidden) advance(); }, DWELL);
-  }
-
-  const io = new IntersectionObserver(es => {
-    es.forEach(e => { if (e.isIntersecting) { setTimeout(start, 600); io.disconnect(); } });
-  }, { threshold: 0.2 });
-  io.observe(grid);
-
-  cards.forEach(c => c.addEventListener('mouseenter', () => { if (started) { paused = true; setFocus(c); } }));
-  grid.addEventListener('mouseleave', () => { paused = false; });
-
-  const reapply = () => { if (started && !visible().some(c => c.classList.contains('focused'))) setFocus(visible()[0]); };
-  document.querySelectorAll('.proj-filter').forEach(b => b.addEventListener('click', () => setTimeout(reapply, 0)));
-  const search = document.querySelector('.proj-search');
-  if (search) search.addEventListener('input', () => setTimeout(reapply, 0));
-}
-</script>
 </body>
 </html>

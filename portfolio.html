@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio · Andre Arante</title>
+<meta name="description" content="Projects by Andre Arante in robotics, computer vision, and reinforcement learning.">
+<script src="assets/theme.js"></script>
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-name" href="./">Andre Arante</a>
+    <ul class="nav-links">
+      <li><a href="./">CV</a></li>
+      <li><a href="portfolio.html" aria-current="page">Portfolio</a></li>
+      <li><a href="publications.html">Publications</a></li>
+      <li><a href="photography.html">Photography</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page">
+  <aside class="sidebar">
+    <!-- Drop a square photo at assets/headshot.jpg and it replaces the initials. -->
+    <div class="avatar"><img src="assets/headshot.jpg" alt="Andre Arante" onerror="this.remove()"><span>AA</span></div>
+    <h3 class="author-name">Andre Arante</h3>
+    <p class="author-bio">Computer Engineering @ GWU, Class of '27. Computer vision, RL, and robotics.</p>
+    <ul class="author-links">
+      <li><a href="mailto:andrearante12@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>Email</a></li>
+      <li><a href="https://github.com/andrearante12" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 00-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 015.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.4-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0012 .5z"/></svg>GitHub</a></li>
+      <li><a href="https://www.linkedin.com/in/andre-arante" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 110-4.13 2.06 2.06 0 010 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>LinkedIn</a></li>
+      <li><a href="resume/resume.pdf?v=20261102" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>Resume</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <section id="projects">
+      <h1 class="section-title">Portfolio</h1>
+      <div id="project-list"></div>
+    </section>
+  </main>
+</div>
+
+<footer>
+  <div class="nav-inner">© 2026 Andre Arante</div>
+</footer>
+
+<script>
+(async function renderProjects() {
+  const list = document.getElementById('project-list');
+  let projects = [];
+  try {
+    const res = await fetch('projects.json', { cache: 'no-cache' });
+    projects = await res.json();
+  } catch (e) {
+    list.innerHTML = '<p>Could not load projects.</p>';
+    return;
+  }
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  const thumb = p => {
+    if (!p.thumb) return '';
+    if (/\.(webm|mp4|mov)$/i.test(p.thumb))
+      return `<video class="item-thumb" src="${esc(p.thumb)}#t=3" preload="metadata" muted playsinline aria-label="${esc(p.title)} demo"></video>`;
+    return `<img class="item-thumb" src="${esc(p.thumb)}" alt="${esc(p.title)}" loading="lazy" onerror="this.remove()">`;
+  };
+
+  list.innerHTML = projects.filter(p => !p.research).map(p => {
+    // A full write-up in this repo (`site`) is the best landing page;
+    // otherwise the per-project detail page.
+    const href = p.site || `projects/${p.slug}.html`;
+    const links = [
+      `<a href="${esc(href)}">${p.site ? 'Write-up' : 'Details'}</a>`,
+      p.github ? `<a href="${esc(p.github)}" target="_blank" rel="noopener">Code</a>` : ''
+    ].join('');
+    const status = p.status ? `<span class="item-status">${esc(p.status)}</span>` : '';
+    return `<article class="item">
+      <h3 class="item-title"><a href="${esc(href)}">${esc(p.title)}</a></h3>
+      <p class="item-context">${esc(p.type)}${status}</p>
+      <p class="item-desc">${esc(p.cardBlurb)}</p>
+      <p class="item-links">${links}</p>
+      ${thumb(p)}
+    </article>`;
+  }).join('');
+
+  // Video thumbnails play on hover, pause on leave.
+  list.querySelectorAll('video.item-thumb').forEach(v => {
+    v.addEventListener('mouseenter', () => v.play().catch(() => {}));
+    v.addEventListener('mouseleave', () => { v.pause(); });
+  });
+})();
+</script>
+</body>
+</html>

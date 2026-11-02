@@ -64,7 +64,7 @@
   const highs = Array.isArray(project.highlights) ? project.highlights : [];
 
   let html = '';
-  html += '<a class="back-link" href="../index.html#projects">← All projects</a>';
+  html += '<a class="back-link" href="../portfolio.html">← Portfolio</a>';
 
   // Hero
   const statusBadge = project.status ? `<span class="status-badge">${esc(project.status)}</span>` : '';
@@ -144,7 +144,7 @@
     if (e.target.matches('input, textarea')) return;
     if (e.key === 'ArrowLeft') window.location.href = prevSlug + '.html';
     else if (e.key === 'ArrowRight') window.location.href = nextSlug + '.html';
-    else if (e.key === 'Escape') window.location.href = '../index.html#projects';
+    else if (e.key === 'Escape') window.location.href = '../portfolio.html';
   });
 
   /* Cursor dot */

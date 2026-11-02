@@ -10,6 +10,7 @@
     "site": "projects/imitationarm/index.html",
     "docs": "imitationarm/index.html",
     "cardBlurb": "A 6-DOF robotic arm that grasps small objects, teleoperated from a custom wearable glove. Modular Ros2 control stack, Rviz2 IK visualizer, and MuJoCo sim environments for reinforcement learning.",
+    "thumb": "projects/imitationarm/media/arm-render.jpg",
     "cardTags": [
       "ROS2",
       "MoveIt2",
@@ -67,6 +68,7 @@
     "icon": "robot",
     "github": "https://github.com/andrearante12/SortBots",
     "cardBlurb": "Senior capstone: a fleet of autonomous mobile robots built for collaborative delivery logistics in warehouse enviornments. Designed for rapid deployment in unmapped indoor spaces — building maps with RGB-D SLAM and splitting work through decentralized task allocation.",
+    "thumb": "assets/projects/sortbots.jpg",
     "cardTags": [
       "ROS2",
       "Isaac Sim",
@@ -152,6 +154,7 @@
     "icon": "controller",
     "github": "https://github.com/andrearante12/vgc-bench",
     "cardBlurb": "A fork and extension of the VGC-Bench Pokémon benchmark that tackles competitive team building. It uses Policy Space Response Oracle search with evolutionary oracles to build competitive Reg I VGC teams optimized adversarily against a meta population.",
+    "thumb": "videos/vgc_demo.webm",
     "cardTags": [
       "PSRO",
       "Self-Play RL",
@@ -197,6 +200,7 @@
     "site": "projects/minecraft/index.html",
     "docs": "minecraft/index.html",
     "cardBlurb": "A modular framework on Project Malmo for training RL agents in fully customizable Minecraft environments. Demo includes successful parkour and bridging agents, with ongoing work into integration with world models for longer horizon tasks such as hunting for food.",
+    "thumb": "projects/minecraft/media/parkour.jpg",
     "cardTags": [
       "PPO",
       "SB3",
@@ -246,6 +250,7 @@
     "icon": "house",
     "github": "https://github.com/andrearante12/IoT-Smart-Home-Network",
     "cardBlurb": "Raspberry Pi based smart home with voice activation via Vosk, Zigbee/MQTT for light control, and a local web interface. Fully offline and private — no cloud.",
+    "thumb": "assets/projects/iot-smarthome.jpg",
     "cardTags": [
       "Raspberry Pi",
       "MQTT",

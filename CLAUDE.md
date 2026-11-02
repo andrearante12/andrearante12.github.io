@@ -8,7 +8,11 @@ Personal portfolio site for Andre Arante (Robotics & Computer Vision Engineer). 
 
 ## File Structure
 
-- `index.html` — Main portfolio: an interactive **3D "workshop" room** built with Three.js. Each device on the desk is a clickable project; a CV-style detection box brackets it and a detail panel slides in. Includes a "scan room" mode, a "research" view that flies out to a front-yard drone-delivery scene, and a photography gallery modal opened from the DSLR prop.
+- `index.html`, `portfolio.html`, `publications.html` — the main site, in a plain academic (AcademicPages-style) layout: masthead tabs (CV · Portfolio · Publications · Photography), sticky left author sidebar, one content column. All three share `assets/site.css` (own light/dark tokens; loads `assets/theme.js` but **not** `theme.css`). The nav + sidebar markup is duplicated in each page, so edit all three together.
+  - `index.html` is the **CV**: hand-extracted from `resume/resume.tex` (education, experience, publications, selected projects, skills). Update it when the resume changes; CI only rebuilds the PDF.
+  - `portfolio.html` renders `projects.json` (title → `site` write-up or `projects/<slug>.html`, context from `type`, `cardBlurb`, optional `thumb` image/video; a missing image is hidden). Image slots: `assets/projects/<slug>.jpg`.
+  - Headshot: drop a square photo at `assets/headshot.jpg` to replace the "AA" avatar.
+  - The previous editorial hero (starfield, SO-101 arm, card grid) is in git history; Theming notes below about the hero describe that version and the pages that still use `theme.css`.
 - `index-classic.html` — The previous single-scroll portfolio (hero / about / project grid with slide-in modal / timeline / contact). Kept as a fallback; not linked from the live site.
 - `photography.html` — Standalone photography gallery: masonry grid, category filter bar, lightbox viewer.
 - `room/` — ES modules that build and drive the 3D room (see below).
