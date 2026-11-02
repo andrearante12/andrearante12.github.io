@@ -155,16 +155,20 @@ The old grid/modal `PROJECTS` array now lives only in `index-classic.html`.
 
 ## Standalone project write-up subsites (`projects/<name>/`)
 
-Two projects have their own multi-page microsites mounted inside the repo
+One project has its own multi-page microsite mounted inside the repo
 rather than a single `projects/<slug>.html` shell:
 
 - `projects/minecraft/` — MalmoRL (overview + parkour / bridging / world-models)
-- `projects/imitationarm/` — ImitationArm (overview + controller / simulator / training)
 
-Both were authored externally with their own layout system (Bricolage
+ImitationArm previously had a matching subsite at `projects/imitationarm/`
+but was folded back into the standard `projects/imitation-arm.html` shell
+(see "Adding/editing projects" above) so it shares the main site's look
+instead of keeping a distinct design.
+
+It was authored externally with its own layout system (Bricolage
 Grotesque / Source Serif 4 / IBM Plex Mono, cream paper + dark console
-panels) and are kept intentionally distinct from the main site's Syne / DM
-Sans look. They are self-contained: relative paths only, no build step, no
+panels) and is kept intentionally distinct from the main site's Syne / DM
+Sans look. It is self-contained: relative paths only, no build step, no
 external requests except Google Fonts.
 
 Each is integrated the same way, all of it in `css/portfolio.css` inside the
@@ -184,9 +188,6 @@ per page:
   themes (hero, `.hud`, `.ascii`, `.clip-slot`, `.net-embed`, `.ik-demo`) are
   left alone. `.diagram` keeps a **cream** plate on dark — those SVGs are drawn
   with dark strokes on transparent.
-  - ImitationArm caveat: its `--paper` does double duty as both a cream
-    surface and as light text on the console, so it is not re-pointed; the
-    surface-role selectors move to `--ia-surface` individually.
 - A `.bar-left` block puts an `← aa.dev` link ahead of the site's own brand,
   and each footer gains an `andre.dev` link.
 

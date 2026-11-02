@@ -7,10 +7,8 @@
     "category": "robotics",
     "icon": "arm",
     "github": "https://github.com/andrearante12/ImitationArm_v2",
-    "site": "projects/imitationarm/index.html",
-    "docs": "imitationarm/index.html",
     "cardBlurb": "A 6-DOF robotic arm that grasps small objects, teleoperated from a custom wearable glove. Modular Ros2 control stack, Rviz2 IK visualizer, and MuJoCo sim environments for reinforcement learning.",
-    "thumb": "projects/imitationarm/media/arm-render.jpg",
+    "thumb": "assets/projects/imitation-arm.jpg",
     "cardTags": [
       "ROS2",
       "MoveIt2",
@@ -45,16 +43,16 @@
     ],
     "media": [
       {
+        "src": "videos/imitationarm_demo.mov",
+        "label": "Pick and place demo"
+      },
+      {
         "src": "videos/robotic_arm_sim.mov",
         "label": "Pick and place demo in MuJuCo simulator"
       },
       {
         "src": "videos/robotic_arm_battery.mov",
         "label": "Pick and place demo of Battery"
-      },
-      {
-        "src": "videos/wearable_controller.mov",
-        "label": "Demo of Wearable Controller Teleoperation"
       }
     ]
   },
