@@ -195,10 +195,8 @@
     "category": "rl",
     "icon": "cube",
     "github": "https://github.com/andrearante12/Minecraft-Reinforcement-Learning",
-    "site": "projects/minecraft/index.html",
-    "docs": "minecraft/index.html",
     "cardBlurb": "A modular framework on Project Malmo for training RL agents in fully customizable Minecraft environments. Demo includes successful parkour and bridging agents, with ongoing work into integration with world models for longer horizon tasks such as hunting for food.",
-    "thumb": "projects/minecraft/media/parkour.jpg",
+    "thumb": "videos/one_block_jump_success.mp4",
     "cardTags": [
       "PPO",
       "SB3",
@@ -226,16 +224,24 @@
     ],
     "media": [
       {
-        "src": "videos/n_envs_demo.mp4",
-        "label": "Parallel training is possible with n enviornments"
-      },
-      {
         "src": "videos/one_block_jump_success.mp4",
         "label": "Succesful parkour episode (1 block gap)"
       },
       {
-        "src": "videos/successful_diagonal_bridge.mp4",
+        "src": "videos/minecraft_parkour_course.webm",
+        "label": "Full parkour course run"
+      },
+      {
+        "src": "videos/minecraft_bridging.webm",
         "label": "Succesful bridging episode (diagonal)"
+      },
+      {
+        "src": "videos/minecraft_hunting.webm",
+        "label": "Early world-model work: hunting for food"
+      },
+      {
+        "src": "videos/n_envs_demo.mp4",
+        "label": "Parallel training is possible with n enviornments"
       }
     ]
   },

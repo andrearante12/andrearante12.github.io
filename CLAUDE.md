@@ -153,46 +153,17 @@ Each project needs **two pieces**:
 
 The old grid/modal `PROJECTS` array now lives only in `index-classic.html`.
 
-## Standalone project write-up subsites (`projects/<name>/`)
+## Standalone project write-up subsites (retired)
 
-One project has its own multi-page microsite mounted inside the repo
-rather than a single `projects/<slug>.html` shell:
+ImitationArm and MalmoRL (Minecraft) each used to have their own multi-page
+microsite mounted at `projects/<name>/`, authored externally with a distinct
+layout system (Bricolage Grotesque / Source Serif 4 / IBM Plex Mono, cream
+paper + dark console panels) instead of the main site's look. Both were
+folded back into the standard `projects/<slug>.html` shell (see "Adding/editing
+projects" above) so every project now shares one template and theme — no
+project keeps a separate design anymore.
 
-- `projects/minecraft/` — MalmoRL (overview + parkour / bridging / world-models)
-
-ImitationArm previously had a matching subsite at `projects/imitationarm/`
-but was folded back into the standard `projects/imitation-arm.html` shell
-(see "Adding/editing projects" above) so it shares the main site's look
-instead of keeping a distinct design.
-
-It was authored externally with its own layout system (Bricolage
-Grotesque / Source Serif 4 / IBM Plex Mono, cream paper + dark console
-panels) and is kept intentionally distinct from the main site's Syne / DM
-Sans look. It is self-contained: relative paths only, no build step, no
-external requests except Google Fonts.
-
-Each is integrated the same way, all of it in `css/portfolio.css` inside the
-subsite (loaded after that site's own `css/site.css`) plus a four-line patch
-per page:
-
-- `<script src="../../assets/theme.js">` in `<head>` (synchronous, so
-  `data-theme` lands before first paint). The site's theme choice carries
-  across, and theme.js injects its toggle into the subsite's `<nav>` — with no
-  `.nav-links` present it wraps the slot list in `.nav-right`.
-- **`assets/theme.css` is deliberately NOT loaded here** — its light overrides
-  target bare `nav` / `footer` selectors that would bleed into the subsite
-  chrome. The toggle button is restyled locally instead.
-- The dark theme is a token swap: the paper tokens (`--limestone`, `--ink`,
-  `--muted`, `--line`, and the link accent) are re-pointed under
-  `:root[data-theme="dark"]`. Surfaces that are dark by design in *both*
-  themes (hero, `.hud`, `.ascii`, `.clip-slot`, `.net-embed`, `.ik-demo`) are
-  left alone. `.diagram` keeps a **cream** plate on dark — those SVGs are drawn
-  with dark strokes on transparent.
-- A `.bar-left` block puts an `← aa.dev` link ahead of the site's own brand,
-  and each footer gains an `andre.dev` link.
-
-Entry points come from `projects.json`: a `site` field (repo-relative, e.g.
-`projects/minecraft/index.html`) makes the **project card** on `index.html`
-open the write-up instead of GitHub — see the `href` logic in `renderProjects`
-— and a `docs` field (relative to `projects/`) adds the "Docs ↗" button on the
-`projects/<slug>.html` detail page.
+`projects.json`'s `site` and `docs` fields, which used to point a project
+card or detail page at one of these subsites, are gone along with them; a
+project's card and CV/portfolio links always resolve to `projects/<slug>.html`
+now.
