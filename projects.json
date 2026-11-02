@@ -8,7 +8,7 @@
     "icon": "arm",
     "github": "https://github.com/andrearante12/ImitationArm_v2",
     "cardBlurb": "A 6-DOF robotic arm that grasps small objects, teleoperated from a custom wearable glove. Modular Ros2 control stack, Rviz2 IK visualizer, and MuJoCo sim environments for reinforcement learning.",
-    "thumb": "assets/projects/imitation-arm.jpg",
+    "thumb": "videos/imitationarm_demo.mov",
     "cardTags": [
       "ROS2",
       "MoveIt2",

@@ -65,7 +65,7 @@
   const thumb = p => {
     if (!p.thumb) return '';
     if (/\.(webm|mp4|mov)$/i.test(p.thumb))
-      return `<video class="item-thumb" src="${esc(p.thumb)}#t=3" preload="metadata" muted playsinline aria-label="${esc(p.title)} demo"></video>`;
+      return `<video class="item-thumb" src="${esc(p.thumb)}" autoplay loop muted playsinline preload="auto" aria-label="${esc(p.title)} demo"></video>`;
     return `<img class="item-thumb" src="${esc(p.thumb)}" alt="${esc(p.title)}" loading="lazy" onerror="this.remove()">`;
   };
 
@@ -86,12 +86,6 @@
       ${thumb(p)}
     </article>`;
   }).join('');
-
-  // Video thumbnails play on hover, pause on leave.
-  list.querySelectorAll('video.item-thumb').forEach(v => {
-    v.addEventListener('mouseenter', () => v.play().catch(() => {}));
-    v.addEventListener('mouseleave', () => { v.pause(); });
-  });
 })();
 </script>
 </body>
