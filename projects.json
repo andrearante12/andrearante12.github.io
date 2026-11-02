@@ -66,7 +66,7 @@
     "icon": "robot",
     "github": "https://github.com/andrearante12/SortBots",
     "cardBlurb": "Senior capstone: a fleet of autonomous mobile robots built for collaborative delivery logistics in warehouse enviornments. Designed for rapid deployment in unmapped indoor spaces — building maps with RGB-D SLAM and splitting work through decentralized task allocation.",
-    "thumb": "assets/projects/sortbots.jpg",
+    "thumb": "assets/projects/sortbots-slam.gif",
     "cardTags": [
       "ROS2",
       "Isaac Sim",
@@ -95,8 +95,8 @@
     ],
     "media": [
       {
-        "src": "videos/sortbots_slam.mp4",
-        "label": "Live RGB-D SLAM in Isaac Sim (RTAB-Map)"
+        "src": "assets/projects/sortbots-slam.gif",
+        "label": "RTAB-Map feature matching during live SLAM mapping"
       }
     ]
   },
