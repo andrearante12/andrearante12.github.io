@@ -72,29 +72,23 @@
 %----------HEADING----------
 \begin{center}
   \textbf{\Huge \scshape Andre Arante} \\ \vspace{1pt}
-  \small \href{mailto:andrearante12@gmail.com}{andrearante12@gmail.com} $|$
+  \small (669) 333-4952 $|$ \href{mailto:andrearante12@gmail.com}{andrearante12@gmail.com} $|$
   \href{https://www.linkedin.com/in/andre-arante}{\underline{linkedin.com/in/andre-arante}} $|$
-  \href{https://github.com/andrearante12}{\underline{github.com/andrearante12}} $|$
-  \href{https://andrearante12.github.io/andre.dev/}{\underline{andrearante12.github.io/andre.dev}}
+  \href{https://github.com/andrearante12}{\underline{github.com/andrearante12}}
 \end{center}
 
   %-----------EDUCATION-----------
   \section{Education}
   \resumeSubHeadingListStart
-    \resumeSubheading
-      {The George Washington University}{Washington, DC}
-      {Bachelor of Science in Electrical and Computer Engineering}{Aug 2023 -- May 2027}
+    \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{The George Washington University} & Washington, DC \\
+      \textit{\small M.S. Artificial Intelligence and Machine Learning Engineering (4+1, Expected 05/28)} & \textit{\small Aug 2027 -- May 2028} \\
+      \textit{\small B.S. Electrical and Computer Engineering, AI and Robotics Track} & \textit{\small Aug 2023 -- May 2027} \\
+    \end{tabular*}\vspace{-7pt}
       \resumeItemListStart
-        \resumeItem{Minor in Computer Science; coursework in Computer Vision, Reinforcement Learning, and Machine Learning}
-        % \resumeItem{Technical GPA: 3.86/4.00}
+        \resumeItem{Minor in Computer Science: coursework in Reinforcement Learning and Computer Vision; Technical GPA: 3.67}
       \resumeItemListEnd
-  \resumeSubHeadingListEnd
-
-%-----------PUBLICATIONS-----------
-  \section{Publications}
-  \resumeSubHeadingListStart
-    \resumeItem{1. \textbf{A. Arante}, M. Ghazanfari, C. Vu, and P. Wei, ``Open-Vocabulary Obstruction Detection for UAS Landing via
-Fine-Tuned YOLO-World'' submitted to \textit{AIAA SciTech 2027}, under review.}
   \resumeSubHeadingListEnd
 
   %-----------EXPERIENCE-----------
@@ -102,40 +96,34 @@ Fine-Tuned YOLO-World'' submitted to \textit{AIAA SciTech 2027}, under review.}
   \resumeSubHeadingListStart
 
   \resumeSubheading
-    {Software Engineering Intern}{May 2026 -- Present}
+    {Software Engineering Intern}{May 2026 -- Aug 2026}
     {Dell Technologies}{Austin, TX}
     \resumeItemListStart
-      \resumeItem{Fine-tuned vision-language-action foundational models ($\pi_0$ and SmolVLA) 
-  via LoRA on curated demonstration datasets for contact-rich manipulation tasks, building the data collection, curation, and SFT pipeline end-to-end 
-  in order to achieve autonomous hardware validation with robotic arms.}
-\resumeItem{Extended post training with human-in-the-loop RL, training a residual policy that learns corrective actions from real-time human feedback, demonstrating improved task success where supervised fine-tuning alone fails}
+      \resumeItem{Fine-tuned a VLA policy (SmolVLA) via imitation learning on expert teleoperated demonstrations to perform autonomous hardware validation of Alienware keyboards on LeRobot's SO-ARM101 robotic arm}
+      \resumeItem{Built a teleoperation data-collection pipeline and GUI tools that catch corrupted demonstrations, cutting collection time from 30 to 8 minutes per task and training from 66h to 8h (88\%) with LoRA and sample-efficient RL}
+      \resumeItem{Improved task success from 40\% to 90\%, and enabled adaptation to new keyboards with 2 hours of training, by architecting an RL post-training methodology that trains a small policy to output corrective actions}
     \resumeItemListEnd
 
   \resumeSubheading
-    {Undergraduate Research Intern}{Sep 2025 -- Present}
-    {The George Washington University}{Washington, DC}
+    {Robotics/AI Engineer Part-Time Contractor}{Oct 2026 -- Present}
+    {AIM Robots, Inc}{Herndon, VA}
     \resumeItemListStart
-      \resumeItem{Ran experiments on the tradeoff between domain fine-tuning and open-vocabulary retention for open-vocabulary object detection models such as Yolo World and deployed for real-time, 
-      safety-critical landing zone obstruction detection for package delivery UAS drones in urban environments, achieved +149\% mAP over baseline.}
-      % \resumeItem{Built autonomous driving test environments using CARLA/SUMO to model highway merging scenarios}
+      \resumeItem{Built a multi-camera calibration pipeline for an AUBO E5 industrial cobot that adapts to moved cameras and changes in work cell size and position, enabling millimeter-level, fully autonomous recalibration from vision alone}
     \resumeItemListEnd
 
   \resumeSubheading
-  {Software Engineering Intern}{Feb 2024 -- Feb 2025}
-  {C-3 Communication Systems, LLC}{Bethesda, MD}
-  \resumeItemListStart
-    \resumeItem{Owned end-to-end development of an autonomous UGV platform on Linux, architecting a modular software stack that integrated computer vision, obstacle detection, and autonomous navigation into a unified control system.}
-    % \resumeItem{Built a Flask-based command center serving live telemetry and sensor feedback for real-time monitoring and control}
-    \resumeItem{Shipped and maintained a full-stack Operations Management System (HTML/CSS/JS, Firebase) in production for 1+ year, automating payroll, time tracking, and logistics workflows for a small startup}
-  \resumeItemListEnd
+    {Research Intern}{Sep 2025 -- Present}
+    {Intelligent Aerospace Systems Lab, The George Washington University}{Washington, DC}
+    \resumeItemListStart
+      \resumeItem{Led fine-tuning of YOLO-World for drone landing-zone obstruction detection, deployed at 56 FPS on Jetson Thor}
+      \resumeItem{Built a 195-image benchmark from real UAS flights that exposed catastrophic forgetting in fine-tuning, then recovered it with balanced fine-tuning (WiSE-FT): +137\% VisDrone mAP@50, 94\% open-vocab retention}
+    \resumeItemListEnd
 
   \resumeSubheading
-    {Data Science Intern}{Jun 2023 -- Aug 2023}
-    {Kaiser Permanente}{San Jose, CA}
+    {Software Engineering Intern}{Feb 2024 -- Feb 2025}
+    {C-3 Comm Systems, LLC}{Bethesda, MD}
     \resumeItemListStart
-        \resumeItem{Refactored a SAS data pipeline into an automated daily job processing millions of patient records across 5 hospitals and generated informative Tableau dashboards, eliminating a manual workflow that gated critical staffing decisions}
-      % \resumeItem{Refactored a SAS pipeline to automate daily processing of millions of patient records across 5 hospitals, replacing a manual workflow that gated ER and radiology staffing decisions.}
-      % \resumeItem{Built an interactive Tableau dashboard tracking 80,000+ annual ER visits, used to staff 50 physicians and 200 support staff and surface peak-hour and patient-type bottlenecks.}
+      \resumeItem{Owned development of an autonomous ground vehicle, building a modular software stack for computer vision, obstacle detection, and navigation, plus a web GUI (React) for mission monitoring and remote takeover}
     \resumeItemListEnd
 
   \resumeSubHeadingListEnd
@@ -144,70 +132,35 @@ Fine-Tuned YOLO-World'' submitted to \textit{AIAA SciTech 2027}, under review.}
   \section{Projects}
   \resumeSubHeadingListStart
 
-  \resumeProjectHeading{\textbf{SortBots -- Distributed Multi-Robot Package Logistics (Senior Capstone)}}{}
+  \resumeProjectHeading{\textbf{ImitationArm -- Robotic Arm Teleoperation Device}}{}
     \resumeItemListStart
-        \resumeItem{One of only 3 ECE student-proposed capstones selected from 19 submissions; only capstone project to independently secure an external sponsor to fully fund my project idea}
-      \resumeItem{Designing a decentralized multi-robot coordination system for autonomous 
-        package logistics in warehouse environments using decentralized coordination, 3D perception (VSLAM), and multi-agent path planning}
+      \resumeItem{Designed a wearable glove controller (ESP32, MPU-6050 IMU) that teleoperates a 6-DoF arm to collect training data, filtering and calibrating noisy IMU data and coded the hand-to-arm transforms and inverse kinematics}
     \resumeItemListEnd
 
-  \resumeProjectHeading{\textbf{ImitationArm - Custom 6-DOF Robotic Arm Manipulator}}{}
-  \resumeItemListStart
-  %   \resumeItem{Designed and built a 6-DOF robotic arm that learns manipulation tasks from human demonstrations via imitation learning
-  % and behavioral cloning}
-    \resumeItem{Developed a ROS 2 / C++ control stack with forward/inverse kinematics and MoveIt2 for motion planning on a high-precision 6-DOF manipulator; integrated MuJoCo for sim-to-real RL training}
-    \resumeItem{Built a custom wearable IMU-based teleoperation controller (ESP32 + MPU-6050) for real-time teleoperation}
-  \resumeItemListEnd
+  \resumeProjectHeading{\textbf{SortBots -- Senior Capstone, Sponsored by C-3 Comm Systems}}{}
+    \resumeItemListStart
+      \resumeItem{Proposed a collaborative multi-robot fleet that deploys into existing warehouses with no fixed infrastructure}
+      \resumeItem{Built a dynamic-object segmentation filter that keeps moving or stopped people and carts out of RTAB-Map SLAM, fusing odometry-compensated depth differencing, open-vocabulary detection (YOLO-World), and NanoSAM masks with per-object tracking to prevent ghost geometry in the multi-robot map}
+      \resumeItem{Designed in FreeCAD and 3D-printed an ESP32-switched electromagnet end effector for an SO-101 arm, and built a vision-guided pick pipeline (ArUco marker, D435 depth) with a compliant-wrist grip}
+    \resumeItemListEnd
 
-  \resumeProjectHeading{\textbf{Reinforcement Learning Agents in Minecraft}}{}
-  \resumeItemListStart
-  %   \resumeItem{Built a modular RL training framework on top of Microsoft Malmo (open-source Minecraft simulator) supporting custom
-  % environment design and multi-environment parallel training}
-    \resumeItem{Trained agents via Behavioral Cloning from human demonstrations using custom Python scripts to record Minecraft gameplay, then fine-tuned with actor-critic networks (PPO) to perform
-  Minecraft parkour and bridging tasks}
-    % \resumeItem{Designed an imitation learning pipeline allowing expert trajectories to be recorded by playing Minecraft normally}
-  \resumeItemListEnd
-
-
-
-  % \resumeProjectHeading{\textbf{Pokémon Miniconsole}}{}
-  % \resumeItemListStart
-  %   \resumeItem{Implemented a fully playable Pokémon battle game on a TM4C123 microcontroller that connects to an external display, plays Pokémon battle themes, and can be controlled with a joystick and on-board switches}
-  % % \resumeItem{Read a two-axis joystick over ADC with dead-zone filtering and GPIO buttons with switch debouncing; rendered ASCII art
-  % % sprites over UART using ANSI escape sequences for partial-screen updates, and drives a speaker via 
-  % %  ISR}
-  % \resumeItemListEnd
-
-  % \resumeProjectHeading{\textbf{RL Gymnasium Agents}}{Fall 2024}
-  % \resumeItemListStart
-  %   \resumeItem{Trained PPO agents across CarRacing-v3, LunarLander-v3, and Humanoid-v5; achieved eval score of 927 on CarRacing via
-  % frame stacking, discretized action space, and reward shaping}
-  %   \resumeItem{Applied physics domain randomization (gravity, wind, turbulence) for LunarLander and a custom pose perturbation wrapper
-  %  for Humanoid-v5 to prevent overfitting to clean episode starts}
-  % \resumeItemListEnd
+  \resumeProjectHeading{\textbf{Learning Long-Horizon Tasks in Minecraft via RL and World Models}}{}
+    \resumeItemListStart
+      \resumeItem{Built a Dreamer-style world model that trains its policy on imagined rollouts and adds a lookahead planner, beating a PPO baseline on vision-based hunting (60--67\% vs 52\% success) under an identical protocol}
+    \resumeItemListEnd
 
   \resumeSubHeadingListEnd
 
-  %-----------EXTRACURRICULARS-----------
-  % \section{Extracurriculars}
-  % \resumeSubHeadingListStart
-
-  % \resumeSubheading
-  %   {GW Rocket Engineering Project}{Aug 2023 -- Dec 2024}
-  %   {Payload Subteam Member}{Washington, DC}
-  %   \resumeItemListStart
-  %     \resumeItem{Trained a YOLO object detection model to detect rocket debris from aerial imagery ($<$10k feet) during recovery}
-  %     \resumeItem{Generated and labeled synthetic datasets using Roboflow to fine-tune YOLO models and improve accuracy}
-  %     % \resumeItem{Integrated a Raspberry Pi, Arducam camera, and XBee RF module into a deployable CubeSat-style payload}
-  %   \resumeItemListEnd
-
-  % \resumeSubHeadingListEnd
+  %-----------PUBLICATIONS-----------
+  \section{Publications}
+  \resumeSubHeadingListStart
+    \resumeItem{\textbf{A. Arante}, M. Ghazanfari, C. Vu, and P. Wei, ``Open-Vocabulary Obstruction Detection for UAS Landing via Fine-Tuned YOLO-World'' accepted to \textit{AIAA SciTech 2027}.}
+  \resumeSubHeadingListEnd
 
 %-----------SKILLS-----------
 \section{Technical Skills}
 \small{
-  \textbf{ML \& Foundation Models:} PyTorch, CUDA, fine-tuning (SFT, RL, LORA), Weights \& Biases, vision-language models (CLIP, YOLO-World), vision-language-action models ($\pi_0$, SmolVLA) \\
-  \textbf{Robotics \& Deployment:} C/C++, Python, Rust, ROS~2, MuJoCo, NVIDIA Jetson, Linux, Git, Docker, Kinematics \\
+  \textbf{Skills:} Python, PyTorch, C/C++, ROS~2, MuJoCo, Isaac Sim, imitation learning, RL, VLAs, teleoperation, OpenCV, FreeCAD, SolidWorks, 3D printing, ESP32, Linux, Git
 }
 
   \end{document}
