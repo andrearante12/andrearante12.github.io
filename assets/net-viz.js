@@ -44,6 +44,19 @@
     // everything is looked up inside `root` (data-nv="…"), so several replays can share a page
     var root = opts.root || document;
     function $(id) { return root.querySelector('[data-nv="' + id + '"]'); }
+
+    // canvas colours follow the page theme: read from the host's CSS custom properties
+    var pal = {};
+    function readPalette() {
+      var cs = getComputedStyle(root === document ? document.documentElement : root);
+      var v = function (name, fallback) { return cs.getPropertyValue(name).trim() || fallback; };
+      pal.dim = v("--dim", COLORS.dim);
+      pal.gold = v("--gold", COLORS.gold);
+      pal.goldRgb = v("--gold-rgb", "196,163,90");
+      pal.hudRgb = v("--hud-rgb", "184,212,168");
+    }
+    readPalette();
+    window.addEventListener("themechange", function () { requestAnimationFrame(readPalette); });
     var canvas = $("canvas");
     if (!canvas) return;
     var ctx = canvas.getContext("2d");
@@ -66,8 +79,11 @@
       if (!c) return;
       var parent = c.parentElement;
       var r = parent.getBoundingClientRect();
-      var title = parent.querySelector("h2");
-      var trim = title ? title.getBoundingClientRect().height + 8 : 0;
+      var cs = getComputedStyle(parent);
+      var trim = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + 6;
+      Array.prototype.forEach.call(parent.children, function (ch) {
+        if (ch !== c) trim += ch.getBoundingClientRect().height;
+      });
       var dpr = Math.min(window.devicePixelRatio || 1, 2);
       var w = Math.max(120, r.width);
       var h = Math.max(minH || 200, (r.height || minH || 200) - trim);
@@ -250,8 +266,8 @@
       var h = canvas.clientHeight;
       ctx.clearRect(0, 0, w, h);
       var t = performance.now() / 1000;
-      var gold = "196,163,90";
-      var hud = "184,212,168";
+      var gold = pal.goldRgb;
+      var hud = pal.hudRgb;
       var cx = w * 0.5;
       var name = (frame && frame.action_name) || "—";
       var pad = 10;
@@ -277,7 +293,7 @@
       function label(text, y) {
         ctx.font = "10px \"IBM Plex Mono\", monospace";
         ctx.textAlign = "center";
-        ctx.fillStyle = COLORS.dim;
+        ctx.fillStyle = pal.dim;
         ctx.fillText(text, cx, y);
       }
 
@@ -309,7 +325,7 @@
       else ctx.rect(px, py, pillW, pillH);
       ctx.fill();
       ctx.stroke();
-      ctx.fillStyle = COLORS.gold;
+      ctx.fillStyle = pal.gold;
       ctx.font = "13px \"IBM Plex Mono\", monospace";
       ctx.textAlign = "center";
       ctx.fillText(name, cx, py + 25);
@@ -405,10 +421,14 @@
       }
     }
 
-    sizeCanvas(canvas, 240);
+    sizeCanvas(canvas, 150);
     sizeCanvas(dreamCanvas, 140);
+    // the canvas fills its box; re-fit whenever the box changes (observation readout, layout, slide shown)
+    if (window.ResizeObserver && canvas.parentElement.classList.contains("nv-canvas")) {
+      new ResizeObserver(function () { sizeCanvas(canvas, 150); drawNet(); }).observe(canvas.parentElement);
+    }
     window.addEventListener("resize", function () {
-      sizeCanvas(canvas, 240);
+      sizeCanvas(canvas, 150);
       sizeCanvas(dreamCanvas, 140);
       drawNet();
       drawDream();
@@ -417,7 +437,7 @@
     var sized = false;
     (function loop() {
       if (canvas.offsetParent) {  // skip while hidden (e.g. an inactive carousel slide)
-        if (!sized) { sizeCanvas(canvas, 240); sizeCanvas(dreamCanvas, 140); sized = true; }
+        if (!sized) { sizeCanvas(canvas, 150); sizeCanvas(dreamCanvas, 140); sized = true; }
         drawNet();
         drawDream();
       } else sized = false;
@@ -695,8 +715,11 @@
           "</div>" +
           '<div class="net-meta"><span data-nv="env">env —</span><span data-nv="step">step 0</span><span class="act" data-nv="action">—</span></div>' +
           '<div class="net-embed">' +
-            '<section class="panel" data-nv="inputs"><h2>Observation</h2><div data-nv="input-fields"></div></section>' +
-            '<section class="panel" data-nv="net"><h2>State → action</h2><canvas data-nv="canvas"></canvas></section>' +
+            '<section class="panel" data-nv="net"><h2>Observation → action</h2>' +
+              '<div class="nv-obs" data-nv="input-fields"></div>' +
+              '<div class="nv-link" aria-hidden="true"></div>' +
+              '<div class="nv-canvas"><canvas data-nv="canvas"></canvas></div>' +
+            "</section>" +
             '<section class="panel" data-nv="outputs">' +
               '<h2>Policy π(a|s)</h2><div data-nv="action-bars"></div>' +
               "<h2>Value V(s)</h2>" +
