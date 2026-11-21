@@ -6,7 +6,7 @@
 <title>Portfolio · Andre Arante</title>
 <meta name="description" content="Projects by Andre Arante in robotics, computer vision, and reinforcement learning.">
 <script src="assets/theme.js"></script>
-<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/site.css?v=20261121">
 </head>
 <body>
 
@@ -93,9 +93,9 @@
   const netViz = fpItems.length && new Promise(resolve => {
     const css = document.createElement('link');
     css.rel = 'stylesheet';
-    css.href = 'assets/net-viz.css';
+    css.href = 'assets/net-viz.css?v=20261121';
     const js = document.createElement('script');
-    js.src = 'assets/net-viz.js';
+    js.src = 'assets/net-viz.js?v=20261121';
     let pending = 2;
     const go = () => { if (--pending === 0) resolve(window.NetViz); };
     css.onload = css.onerror = go;

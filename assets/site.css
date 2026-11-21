@@ -134,6 +134,7 @@
   .car-nav { display: flex; align-items: center; gap: 4px; margin: 0 0 8px; font-size: 13px; color: var(--muted); min-width: 0; }
   .car-nav[hidden], .car-slide[hidden] { display: none; }
   .car-nav button {
+    -webkit-appearance: none; appearance: none; margin: 0; line-height: 1;
     font: inherit; min-width: 26px; height: 26px; padding: 0 6px; cursor: pointer;
     border: 1px solid var(--border); border-radius: 3px; background: transparent; color: var(--text);
   }
