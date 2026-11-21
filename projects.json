@@ -209,8 +209,7 @@
       "poster": "assets/projects/minecraft-parkour.jpg",
       "replay": "data/minecraft_parkour_replay.json",
       "synth": "parkour",
-      "kicker": "clip · F5",
-      "caption": "Left: the parkour agent sprint-jumping a gap. Right: a PPO step on simple_jump. The voxels at its feet and its body state feed a three-stream actor-critic, which outputs π(a|s) and a value estimate. Pause and scrub the replay."
+      "kicker": "clip · F5"
     },
     "description": [
       "A modular framework built on top of Project Malmo, an open source minecraft simulator to support training of Reinforcement Learning based agents in completely customizeable enviornments for specialized tasks.",

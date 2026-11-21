@@ -10,7 +10,8 @@ Personal portfolio site for Andre Arante (Robotics & Computer Vision Engineer). 
 
 - `index.html`, `portfolio.html`, `publications.html` — the main site, in a plain academic (AcademicPages-style) layout: masthead tabs (CV · Portfolio · Publications · Photography), sticky left author sidebar, one content column. All three share `assets/site.css` (own light/dark tokens; loads `assets/theme.js` but **not** `theme.css`). The nav + sidebar markup is duplicated in each page, so edit all three together.
   - `index.html` is the **CV**: hand-extracted from `resume/resume.tex` (education, experience, publications, selected projects, skills). Update it when the resume changes; CI only rebuilds the PDF.
-  - `portfolio.html` renders `projects.json` (title → `site` write-up or `projects/<slug>.html`, context from `type`, `cardBlurb`, optional `thumb` image/video; a missing image is hidden). Image slots: `assets/projects/<slug>.jpg`.
+  - `portfolio.html` renders `projects.json` (title → the project's `github` repo, the only link on a card; context from `type`, `cardBlurb`, optional `thumb` image/video; a missing image is hidden). Image slots: `assets/projects/<slug>.jpg`. There are no per-project write-up pages.
+  - A project with a `forwardPass` entry (`video`, `poster`, `replay`, `synth`, `kicker`) shows its clip beside a live actor-critic replay instead of `thumb`, via `NetViz.embed()` in `assets/net-viz.js` (+ `net-viz.css`). Replay data lives in `data/`. Only one per page: the viz uses fixed element ids.
   - Headshot: drop a square photo at `assets/headshot.jpg` to replace the "AA" avatar.
   - The previous editorial hero (starfield, SO-101 arm, card grid) is in git history; Theming notes below about the hero describe that version and the pages that still use `theme.css`.
 - `index-classic.html` — The previous single-scroll portfolio (hero / about / project grid with slide-in modal / timeline / contact). Kept as a fallback; not linked from the live site.
@@ -153,17 +154,10 @@ Each project needs **two pieces**:
 
 The old grid/modal `PROJECTS` array now lives only in `index-classic.html`.
 
-## Standalone project write-up subsites (retired)
+## Project write-up pages (removed)
 
-ImitationArm and MalmoRL (Minecraft) each used to have their own multi-page
-microsite mounted at `projects/<name>/`, authored externally with a distinct
-layout system (Bricolage Grotesque / Source Serif 4 / IBM Plex Mono, cream
-paper + dark console panels) instead of the main site's look. Both were
-folded back into the standard `projects/<slug>.html` shell (see "Adding/editing
-projects" above) so every project now shares one template and theme — no
-project keeps a separate design anymore.
-
-`projects.json`'s `site` and `docs` fields, which used to point a project
-card or detail page at one of these subsites, are gone along with them; a
-project's card and CV/portfolio links always resolve to `projects/<slug>.html`
-now.
+Projects used to have detail pages (`projects/<slug>.html`, rendered by
+`assets/project-page.js`), and before that ImitationArm and MalmoRL had
+their own microsites under `projects/<name>/`. All of these are gone; they're
+in git history. `projects.json` still carries the fields those pages read
+(`description`, `highlights`, `stack`, `media`) but nothing renders them now.

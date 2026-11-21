@@ -1,4 +1,4 @@
-/* Forward-pass block on a project page: clip | live actor-critic replay (assets/net-viz.js).
+/* Forward-pass block on the portfolio card: clip | live actor-critic replay (assets/net-viz.js).
  * The console panels stay dark in both themes; only the surrounding chrome follows site tokens. */
 
 .fp-host {
@@ -15,16 +15,6 @@
   --lapis: #3d5a8a;
   --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 }
-
-/* On the write-up page, break out of the 760px article column to the page width */
-.fp-block {
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(1052px, calc(100vw - 48px));
-}
-.fp-block .pp-para { max-width: 712px; margin-left: auto; margin-right: auto; }
-.fp-block .section-title { max-width: 712px; margin-left: auto; margin-right: auto; }
 
 .demo-stage {
   display: grid;
