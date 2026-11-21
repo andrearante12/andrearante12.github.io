@@ -127,6 +127,17 @@
   .cv-skills { margin: 0; font-size: 15px; }
   .cv-skills dt { font-weight: 600; color: var(--heading); }
   .cv-skills dd { margin: 0 0 10px; }
+  .car-nav { display: flex; align-items: center; gap: 4px; margin: 0 0 8px; font-size: 13px; color: var(--muted); min-width: 0; }
+  .car-nav[hidden], .car-slide[hidden] { display: none; }
+  .car-nav button {
+    font: inherit; min-width: 26px; height: 26px; padding: 0 6px; cursor: pointer;
+    border: 1px solid var(--border); border-radius: 3px; background: transparent; color: var(--text);
+  }
+  .car-nav button:hover { border-color: var(--muted); }
+  .car-nav button[aria-current="true"] { background: var(--heading); border-color: var(--heading); color: var(--bg); }
+  .car-nav button + .car-label { margin-left: 8px; }
+  .car-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
   .more { font-size: 14px; margin: 12px 0 0; }
 
   footer {

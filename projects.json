@@ -5,7 +5,20 @@
     "type": "Robotics · Hardware",
     "github": "https://github.com/andrearante12/ImitationArm_v2",
     "cardBlurb": "A 6-DOF robotic arm that grasps small objects, teleoperated from a custom wearable glove. Modular Ros2 control stack, Rviz2 IK visualizer, and MuJoCo sim environments for reinforcement learning.",
-    "thumb": "videos/imitationarm_demo.mov"
+    "media": [
+      {
+        "src": "videos/imitationarm_demo.mov",
+        "label": "Pick and place demo"
+      },
+      {
+        "src": "videos/imitationarm_tape.mov",
+        "label": "Picking up a tape measure"
+      },
+      {
+        "src": "videos/imitationarm_battery.mp4",
+        "label": "Picking up a battery"
+      }
+    ]
   },
   {
     "slug": "sortbots",
@@ -14,7 +27,40 @@
     "status": "In Progress",
     "github": "https://github.com/andrearante12/SortBots",
     "cardBlurb": "Senior capstone: a fleet of autonomous mobile robots built for collaborative delivery logistics in warehouse enviornments. Designed for rapid deployment in unmapped indoor spaces — building maps with RGB-D SLAM and splitting work through decentralized task allocation.",
-    "thumb": "assets/projects/sortbots-slam.gif"
+    "media": [
+      {
+        "src": "assets/projects/sortbots/pick_and_place.gif",
+        "label": "Warehouse pick and place with a magnetic end effector"
+      },
+      {
+        "src": "assets/projects/sortbots/operator_view_demo.gif",
+        "label": "Operator dashboard assigning tasks across the fleet"
+      },
+      {
+        "src": "assets/projects/sortbots/slam_feature_mapping.gif",
+        "label": "RTAB-Map feature matching during live SLAM mapping"
+      },
+      {
+        "src": "assets/projects/sortbots/detect_pedestrian.gif",
+        "label": "Obstacle detection: pedestrian"
+      },
+      {
+        "src": "assets/projects/sortbots/detect_robot.gif",
+        "label": "Obstacle detection: another robot"
+      },
+      {
+        "src": "assets/projects/sortbots/comms_in_range.gif",
+        "label": "Mesh comms: both robots in range of the gateway"
+      },
+      {
+        "src": "assets/projects/sortbots/comms_relay_hop.gif",
+        "label": "Mesh comms: 2-hop relay through the other robot"
+      },
+      {
+        "src": "assets/projects/sortbots/comms_direct_vs_relay.gif",
+        "label": "Mesh comms: direct link vs. routed relay around obstacles"
+      }
+    ]
   },
   {
     "slug": "uas-detection",
@@ -25,21 +71,19 @@
     "cardBlurb": "Fine-tuned YOLO-World for open-vocabulary obstruction detection on drone landing pads. Zero-shot generalization to unseen obstacle classes; paper in progress for AIAA SciTech 2027."
   },
   {
-    "slug": "vgc",
-    "title": "VGC Teambuilder Agent",
-    "type": "Reinforcement Learning · Research",
-    "github": "https://github.com/andrearante12/vgc-bench",
-    "cardBlurb": "A fork and extension of the VGC-Bench Pokémon benchmark that tackles competitive team building. It uses Policy Space Response Oracle search with evolutionary oracles to build competitive Reg I VGC teams optimized adversarily against a meta population.",
-    "thumb": "videos/vgc_demo.webm"
-  },
-  {
     "slug": "minecraft-rl",
     "title": "Minecraft Parkour RL",
     "type": "Reinforcement Learning · Simulation",
     "github": "https://github.com/andrearante12/Minecraft-Reinforcement-Learning",
     "cardBlurb": "A modular framework on Project Malmo for training RL agents in fully customizable Minecraft environments. Demo includes successful parkour and bridging agents, with ongoing work into integration with world models for longer horizon tasks such as hunting for food.",
-    "thumb": "videos/minecraft_parkour.webm",
+    "media": [
+      {
+        "src": "videos/minecraft_bridging.webm",
+        "label": "Bridging agent crossing a diagonal gap"
+      }
+    ],
     "forwardPass": {
+      "label": "Forward pass: PPO policy replay",
       "video": "videos/minecraft_parkour.webm",
       "poster": "assets/projects/minecraft-parkour.jpg",
       "replay": "data/minecraft_parkour_replay.json",
@@ -48,11 +92,28 @@
     }
   },
   {
+    "slug": "vgc",
+    "title": "VGC Teambuilder Agent",
+    "type": "Reinforcement Learning · Research",
+    "github": "https://github.com/andrearante12/vgc-bench",
+    "cardBlurb": "A fork and extension of the VGC-Bench Pokémon benchmark that tackles competitive team building. It uses Policy Space Response Oracle search with evolutionary oracles to build competitive Reg I VGC teams optimized adversarily against a meta population.",
+    "media": [
+      {
+        "src": "videos/vgc_demo.webm",
+        "label": "PSRO-built team battling live on a Showdown server"
+      }
+    ]
+  },
+  {
     "slug": "iot-smarthome",
     "title": "IoT Smart Home Network",
     "type": "IoT · Hardware",
     "github": "https://github.com/andrearante12/IoT-Smart-Home-Network",
     "cardBlurb": "Raspberry Pi based smart home with voice activation via Vosk, Zigbee/MQTT for light control, and a local web interface. Fully offline and private — no cloud.",
-    "thumb": "assets/projects/iot-smarthome.jpg"
+    "media": [
+      {
+        "src": "assets/projects/iot-smarthome.jpg"
+      }
+    ]
   }
 ]

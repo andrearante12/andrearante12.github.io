@@ -63,12 +63,17 @@
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c =>
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-  const thumb = p => {
-    if (!p.thumb) return '';
-    if (/\.(webm|mp4|mov)$/i.test(p.thumb))
-      return `<video class="item-thumb" src="${esc(p.thumb)}" autoplay loop muted playsinline preload="auto" aria-label="${esc(p.title)} demo"></video>`;
-    return `<img class="item-thumb" src="${esc(p.thumb)}" alt="${esc(p.title)}" loading="lazy" onerror="this.remove()">`;
+  // One card slide per media item; a project's forward-pass replay comes first.
+  const slide = (m, i) => {
+    const hide = i ? ' hidden' : '';
+    const label = esc(m.label || '');
+    if (m.fp) return `<div class="car-slide" data-label="${label}"${hide}><div id="fp-host"></div></div>`;
+    if (/\.(webm|mp4|mov)$/i.test(m.src))
+      // only the first video loads up front; the rest get their src when shown
+      return `<div class="car-slide" data-label="${label}"${hide}><video class="item-thumb" ${i ? 'data-src' : 'src'}="${esc(m.src)}" ${i ? '' : 'autoplay '}loop muted playsinline preload="${i ? 'none' : 'auto'}" aria-label="${label}"></video></div>`;
+    return `<div class="car-slide" data-label="${label}"${hide}><img class="item-thumb" src="${esc(m.src)}" alt="${label}" loading="lazy"></div>`;
   };
+  const media = p => [...(p.forwardPass ? [{ fp: true, label: p.forwardPass.label }] : []), ...(p.media || [])];
 
   list.innerHTML = projects.filter(p => !p.research).map(p => {
     const status = p.status ? `<span class="item-status">${esc(p.status)}</span>` : '';
@@ -78,9 +83,60 @@
         : esc(p.title)}</h3>
       <p class="item-context">${esc(p.type)}${status}</p>
       <p class="item-desc">${esc(p.cardBlurb)}</p>
-      ${p.forwardPass ? '<div id="fp-host"></div>' : thumb(p)}
+      ${media(p).length ? `<div class="car"><div class="car-nav"></div>${media(p).map(slide).join('')}</div>` : ''}
     </article>`;
   }).join('');
+
+  // Card carousels: ‹ 1 2 3 › above the media, one slide (and one playing video) at a time.
+  list.querySelectorAll('.car').forEach(car => {
+    const nav = car.querySelector('.car-nav');
+    let cur = 0;
+    const slides = () => [...car.querySelectorAll('.car-slide')];
+    const show = i => {
+      const all = slides();
+      if (!all.length) return car.remove();
+      cur = (i + all.length) % all.length;
+      all.forEach((s, j) => {
+        s.hidden = j !== cur;
+        const v = s.querySelector('video:not(.demo-stage video)');
+        if (!v) return;
+        if (j !== cur) return v.pause();
+        if (v.dataset.src) { v.src = v.dataset.src; delete v.dataset.src; }
+        v.play().catch(() => {});
+      });
+      // the replay canvas sizes itself on resize; it measured 0 while hidden
+      if (all[cur].querySelector('#fp-host')) window.dispatchEvent(new Event('resize'));
+      render();
+    };
+    const render = () => {
+      const all = slides();
+      const label = all[cur] ? all[cur].dataset.label : '';
+      nav.innerHTML = (all.length > 1
+        ? `<button type="button" data-step="-1" aria-label="Previous">‹</button>` +
+          all.map((_, j) => `<button type="button" data-go="${j}"${j === cur ? ' aria-current="true"' : ''} aria-label="Show ${j + 1}">${j + 1}</button>`).join('') +
+          `<button type="button" data-step="1" aria-label="Next">›</button>`
+        : '') + (label ? `<span class="car-label">${esc(label)}</span>` : '');
+      nav.hidden = !nav.innerHTML;
+    };
+    nav.addEventListener('click', e => {
+      const b = e.target.closest('button');
+      if (!b) return;
+      show(b.dataset.go != null ? +b.dataset.go : cur + +b.dataset.step);
+    });
+    // a missing image/video drops its slide instead of leaving an empty box
+    const drop = el => {
+      const s = el.closest('.car-slide');
+      if (!s.isConnected) return;
+      const at = slides().indexOf(s);
+      s.remove();
+      show(at < cur ? cur - 1 : Math.min(cur, slides().length - 1));
+    };
+    show(0);
+    car.querySelectorAll('.car-slide > img, .car-slide > video').forEach(el => {
+      el.addEventListener('error', () => drop(el), { once: true });
+      if (el.tagName === 'IMG' && el.complete && !el.naturalWidth) drop(el);  // failed before we listened
+    });
+  });
 
   // Clip | live policy replay (assets/net-viz.js) on the card that has one.
   const fp = (projects.find(p => !p.research && p.forwardPass) || {}).forwardPass;
