@@ -159,5 +159,6 @@ The old grid/modal `PROJECTS` array now lives only in `index-classic.html`.
 Projects used to have detail pages (`projects/<slug>.html`, rendered by
 `assets/project-page.js`), and before that ImitationArm and MalmoRL had
 their own microsites under `projects/<name>/`. All of these are gone; they're
-in git history. `projects.json` still carries the fields those pages read
-(`description`, `highlights`, `stack`, `media`) but nothing renders them now.
+in git history. The fields those pages read (`description`, `highlights`,
+`stack`, `media`, plus `accent`/`category`/`icon`/`cardTags`)
+were stripped from `projects.json` when they went.
