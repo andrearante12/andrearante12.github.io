@@ -71,8 +71,8 @@
   };
 
   list.innerHTML = projects.filter(p => !p.research).map(p => {
-    // A full write-up in this repo (`site`) is the best landing page;
-    // otherwise the per-project detail page.
+    // The title goes to the GitHub repo; "Details" keeps the write-up
+    // (`site`, else the per-project page) reachable.
     const href = p.site || `projects/${p.slug}.html`;
     const links = [
       `<a href="${esc(href)}">${p.site ? 'Write-up' : 'Details'}</a>`,
@@ -80,7 +80,9 @@
     ].join('');
     const status = p.status ? `<span class="item-status">${esc(p.status)}</span>` : '';
     return `<article class="item">
-      <h3 class="item-title"><a href="${esc(href)}">${esc(p.title)}</a></h3>
+      <h3 class="item-title">${p.github
+        ? `<a href="${esc(p.github)}" target="_blank" rel="noopener">${esc(p.title)}</a>`
+        : `<a href="${esc(href)}">${esc(p.title)}</a>`}</h3>
       <p class="item-context">${esc(p.type)}${status}</p>
       <p class="item-desc">${esc(p.cardBlurb)}</p>
       <p class="item-links">${links}</p>

@@ -77,6 +77,37 @@
       desc.map(p => `<p class="pp-para">${esc(p)}</p>`).join('') + `</section>`;
   }
 
+  // Forward pass: clip | live actor-critic replay (assets/net-viz.js)
+  const fp = project.forwardPass;
+  if (fp) {
+    html += `<section class="pp-block fp-block"><h2 class="section-title">Forward pass</h2>
+      ${fp.caption ? `<p class="pp-para">${esc(fp.caption)}</p>` : ''}
+      <div class="demo-stage">
+        <div class="clip-slot">
+          ${fp.kicker ? `<span class="clip-kicker">${esc(fp.kicker)}</span>` : ''}
+          <video autoplay muted loop playsinline${fp.poster ? ` poster="../${esc(fp.poster)}"` : ''}><source src="../${esc(fp.video)}"></video>
+        </div>
+        <div class="net-wrap">
+          <div class="net-controls">
+            <button type="button" id="play">pause</button>
+            <span id="scrub-label">—</span>
+            <input id="scrub" type="range" min="0" max="0" value="0" aria-label="Replay step">
+          </div>
+          <div class="net-meta"><span id="env">env —</span><span id="step">step 0</span><span class="act" id="action">—</span></div>
+          <div class="net-embed">
+            <section class="panel" id="inputs"><h2>Observation</h2><div id="input-fields"></div></section>
+            <section class="panel" id="net"><h2>State → action</h2><canvas id="canvas"></canvas></section>
+            <section class="panel" id="outputs">
+              <h2>Policy π(a|s)</h2><div id="action-bars"></div>
+              <h2>Value V(s)</h2>
+              <div class="gauge-track"><div class="gauge-fill" id="value-fill"></div></div>
+              <div class="gauge-labels"><span id="value-min">—</span><span id="value-num">—</span><span id="value-max">—</span></div>
+            </section>
+          </div>
+        </div>
+      </div></section>`;
+  }
+
   // Media gallery
   if (media.length) {
     html += `<section class="pp-block"><h2 class="section-title">Media</h2>
@@ -116,6 +147,20 @@
   }
 
   root.innerHTML = html;
+
+  if (fp) {
+    const css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = '../assets/net-viz.css';
+    const js = document.createElement('script');
+    js.src = '../assets/net-viz.js';
+    // mount after the stylesheet lands so the canvas sizes against the final layout
+    let pending = 2;
+    const go = () => { if (--pending === 0) window.NetViz.mount({ url: fp.replay ? '../' + fp.replay : null, synth: fp.synth }); };
+    css.onload = css.onerror = go;
+    js.onload = go;
+    document.head.append(css, js);
+  }
 
   /* Drop any media tile whose video/image fails to load — no empty boxes.
    * If a gallery ends up empty, remove its whole "Media" section. */
