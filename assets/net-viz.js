@@ -13,7 +13,6 @@
     lapis: "#3d5a8a"
   };
 
-  function $(id) { return document.getElementById(id); }
   function lerp(a, b, t) { return a + (b - a) * t; }
 
   function chevron(ctx, x, y0, y1, rgb, t, reduceMotion) {
@@ -42,6 +41,9 @@
 
   function mount(opts) {
     opts = opts || {};
+    // everything is looked up inside `root` (data-nv="…"), so several replays can share a page
+    var root = opts.root || document;
+    function $(id) { return root.querySelector('[data-nv="' + id + '"]'); }
     var canvas = $("canvas");
     if (!canvas) return;
     var ctx = canvas.getContext("2d");
@@ -58,7 +60,7 @@
     var dt = opts.dt || 150;
     var meta = {};
     var synced = false;
-    var video = document.querySelector(".demo-stage .clip-slot video");
+    var video = root.querySelector(".clip-slot video");
 
     function sizeCanvas(c, minH) {
       if (!c) return;
@@ -85,7 +87,7 @@
       (s.input_fields || []).forEach(function (f) {
         var d = document.createElement("div");
         d.className = "field";
-        var extra = f.key === "vox" ? "<div class=\"vox\" id=\"vox\"></div>" : "<div class=\"vals\" data-key=\"" + f.key + "\"></div>";
+        var extra = f.key === "vox" ? "<div class=\"vox\" data-nv=\"vox\"></div>" : "<div class=\"vals\" data-key=\"" + f.key + "\"></div>";
         d.innerHTML = "<div class=\"lbl\">" + f.label + "</div>" + extra;
         inputsEl.appendChild(d);
       });
@@ -118,14 +120,14 @@
       if (!inputs || !schema) return;
       (schema.input_fields || []).forEach(function (f) {
         if (f.key === "vox") {
-          var cells = document.querySelectorAll("#vox span");
+          var cells = $("vox").querySelectorAll("span");
           var grid = inputs.vox || [];
           cells.forEach(function (el, i) {
             el.classList.toggle("on", !!grid[i]);
           });
           return;
         }
-        var wrap = document.querySelector("#input-fields [data-key=\"" + f.key + "\"]");
+        var wrap = $("input-fields").querySelector("[data-key=\"" + f.key + "\"]");
         if (!wrap) return;
         wrap.innerHTML = "";
         var val = inputs[f.key];
@@ -152,7 +154,7 @@
 
     function setBars(fr) {
       if (!schema) return;
-      document.querySelectorAll("#action-bars .abar").forEach(function (row, i) {
+      $("action-bars").querySelectorAll(".abar").forEach(function (row, i) {
         var p = (fr.probs && fr.probs[i]) || 0;
         row.classList.toggle("chosen", i === fr.action);
         row.querySelector(".fill").style.width = (p * 100).toFixed(1) + "%";
@@ -412,9 +414,13 @@
       drawDream();
     });
 
+    var sized = false;
     (function loop() {
-      drawNet();
-      drawDream();
+      if (canvas.offsetParent) {  // skip while hidden (e.g. an inactive carousel slide)
+        if (!sized) { sizeCanvas(canvas, 240); sizeCanvas(dreamCanvas, 140); sized = true; }
+        drawNet();
+        drawDream();
+      } else sized = false;
       requestAnimationFrame(loop);
     })();
 
@@ -664,7 +670,8 @@
   }
 
   /* Write the clip | replay block into `host` and start it.
-   * fp = projects.json `forwardPass`; base = path prefix from the page to the repo root. */
+   * fp = a projects.json media item with a `replay`/`synth` (src, poster, kicker, replay, synth);
+   * base = path prefix from the page to the repo root. */
   function embed(host, fp, base) {
     base = base || "";
     var e = function (v) {
@@ -678,28 +685,28 @@
         '<div class="clip-slot">' +
           (fp.kicker ? '<span class="clip-kicker">' + e(fp.kicker) + "</span>" : "") +
           '<video autoplay muted loop playsinline' + (fp.poster ? ' poster="' + e(base + fp.poster) + '"' : "") + ">" +
-            '<source src="' + e(base + fp.video) + '"></video>' +
+            '<source src="' + e(base + fp.src) + '"></video>' +
         "</div>" +
         '<div class="net-wrap">' +
           '<div class="net-controls">' +
-            '<button type="button" id="play">pause</button>' +
-            '<span id="scrub-label">—</span>' +
-            '<input id="scrub" type="range" min="0" max="0" value="0" aria-label="Replay step">' +
+            '<button type="button" data-nv="play">pause</button>' +
+            '<span data-nv="scrub-label">—</span>' +
+            '<input data-nv="scrub" type="range" min="0" max="0" value="0" aria-label="Replay step">' +
           "</div>" +
-          '<div class="net-meta"><span id="env">env —</span><span id="step">step 0</span><span class="act" id="action">—</span></div>' +
+          '<div class="net-meta"><span data-nv="env">env —</span><span data-nv="step">step 0</span><span class="act" data-nv="action">—</span></div>' +
           '<div class="net-embed">' +
-            '<section class="panel" id="inputs"><h2>Observation</h2><div id="input-fields"></div></section>' +
-            '<section class="panel" id="net"><h2>State → action</h2><canvas id="canvas"></canvas></section>' +
-            '<section class="panel" id="outputs">' +
-              '<h2>Policy π(a|s)</h2><div id="action-bars"></div>' +
+            '<section class="panel" data-nv="inputs"><h2>Observation</h2><div data-nv="input-fields"></div></section>' +
+            '<section class="panel" data-nv="net"><h2>State → action</h2><canvas data-nv="canvas"></canvas></section>' +
+            '<section class="panel" data-nv="outputs">' +
+              '<h2>Policy π(a|s)</h2><div data-nv="action-bars"></div>' +
               "<h2>Value V(s)</h2>" +
-              '<div class="gauge-track"><div class="gauge-fill" id="value-fill"></div></div>' +
-              '<div class="gauge-labels"><span id="value-min">—</span><span id="value-num">—</span><span id="value-max">—</span></div>' +
+              '<div class="gauge-track"><div class="gauge-fill" data-nv="value-fill"></div></div>' +
+              '<div class="gauge-labels"><span data-nv="value-min">—</span><span data-nv="value-num">—</span><span data-nv="value-max">—</span></div>' +
             "</section>" +
           "</div>" +
         "</div>" +
       "</div>";
-    mount({ url: fp.replay ? base + fp.replay : null, synth: fp.synth });
+    mount({ root: host, url: fp.replay ? base + fp.replay : null, synth: fp.synth });
   }
 
   global.NetViz = { mount: mount, embed: embed, synthesize: synthesize };

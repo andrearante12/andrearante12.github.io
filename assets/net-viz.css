@@ -110,7 +110,7 @@
   text-transform: uppercase;
   color: var(--dim);
 }
-.net-embed #net {
+.net-embed [data-nv="net"] {
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -119,8 +119,8 @@
   border-left: 1px solid var(--stone);
   border-right: 1px solid var(--stone);
 }
-.net-embed #net h2 { padding: 0 0.7rem; margin-bottom: 0.3rem; }
-.net-embed #canvas { flex: 1 1 auto; width: 100%; min-height: 22rem; }
+.net-embed [data-nv="net"] h2 { padding: 0 0.7rem; margin-bottom: 0.3rem; }
+.net-embed [data-nv="canvas"] { flex: 1 1 auto; width: 100%; min-height: 22rem; }
 
 .field { margin-bottom: 0.85rem; }
 .field .lbl { font-size: 0.65rem; color: var(--dim); margin-bottom: 0.3rem; }
@@ -137,7 +137,7 @@
 .chip.bool-on { color: var(--hud); border-color: var(--moss); }
 .chip.bool-off { color: var(--dim); }
 
-.vox { display: grid; gap: 2px; margin-top: 0.35rem; }
+.vox { display: grid; gap: 2px; margin-top: 0.35rem; max-width: 8.5rem; }
 .vox span { width: 100%; aspect-ratio: 1; background: var(--void-2); border: 1px solid var(--stone); }
 .vox span.on { background: var(--gold); border-color: var(--gold-dim); }
 
@@ -165,22 +165,32 @@
   color: var(--dim);
   font-variant-numeric: tabular-nums;
 }
-#value-num { color: var(--paper); }
+[data-nv="value-num"] { color: var(--paper); }
 
-/* Narrower than the full three-panel console: keep clip | network side by side
- * and drop the observation/policy side panels (the canvas still shows the voxels
- * going in and the chosen action coming out). */
+/* Narrower than the full console (e.g. a portfolio card): the clip sits beside
+ * the controls + network, and the observation / policy panels drop into a row
+ * underneath. net-wrap and net-embed dissolve so every piece is a grid cell. */
 @container (max-width: 900px) {
-  .demo-stage { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); }
-  .net-embed { grid-template-columns: 1fr; min-height: 0; }
-  .net-embed #inputs, .net-embed #outputs { display: none; }
-  .net-embed #net { border: 0; }
-  .net-embed #canvas, .demo-stage .clip-slot { min-height: 18rem; }
+  .demo-stage {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+    grid-template-areas: "clip ctl" "clip meta" "clip net" "in out";
+    gap: 8px 10px;
+  }
+  .net-wrap, .net-embed { display: contents; }
+  .demo-stage .clip-slot { grid-area: clip; min-height: 0; }
+  .net-controls { grid-area: ctl; margin: 0; }
+  .net-meta { grid-area: meta; margin: 0; }
+  .net-embed .panel { background: var(--void); color: var(--paper); font-family: var(--mono); border: 1px solid var(--stone); border-radius: 4px; }
+  .net-embed [data-nv="inputs"] { grid-area: in; }
+  .net-embed [data-nv="outputs"] { grid-area: out; }
+  .net-embed [data-nv="net"] { grid-area: net; }
+  .net-embed [data-nv="canvas"] { min-height: 17rem; }
 }
 @container (max-width: 400px) {
-  .demo-stage { grid-template-columns: 1fr; }
-  .demo-stage .clip-slot { min-height: 0; aspect-ratio: 16 / 10; }
+  .demo-stage { grid-template-columns: minmax(0, 1fr); grid-template-areas: "clip" "ctl" "meta" "net" "in" "out"; }
+  .demo-stage .clip-slot { aspect-ratio: 16 / 10; }
 }
+
 @media (prefers-reduced-motion: reduce) {
   .abar .fill, .gauge-fill { transition: none; }
 }

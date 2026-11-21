@@ -63,17 +63,19 @@
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c =>
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-  // One card slide per media item; a project's forward-pass replay comes first.
+  // One card slide per media item. An item with a `replay`/`synth` is a clip | live
+  // policy replay (assets/net-viz.js), mounted the first time its slide is shown.
+  const fpItems = [];
   const slide = (m, i) => {
     const hide = i ? ' hidden' : '';
     const label = esc(m.label || '');
-    if (m.fp) return `<div class="car-slide" data-label="${label}"${hide}><div id="fp-host"></div></div>`;
+    if (m.replay || m.synth) return `<div class="car-slide" data-label="${label}" data-fp="${fpItems.push(m) - 1}"${hide}></div>`;
     if (/\.(webm|mp4|mov)$/i.test(m.src))
       // only the first video loads up front; the rest get their src when shown
       return `<div class="car-slide" data-label="${label}"${hide}><video class="item-thumb" ${i ? 'data-src' : 'src'}="${esc(m.src)}" ${i ? '' : 'autoplay '}loop muted playsinline preload="${i ? 'none' : 'auto'}" aria-label="${label}"></video></div>`;
     return `<div class="car-slide" data-label="${label}"${hide}><img class="item-thumb" src="${esc(m.src)}" alt="${label}" loading="lazy"></div>`;
   };
-  const media = p => [...(p.forwardPass ? [{ fp: true, label: p.forwardPass.label }] : []), ...(p.media || [])];
+  const media = p => p.media || [];
 
   list.innerHTML = projects.filter(p => !p.research).map(p => {
     const status = p.status ? `<span class="item-status">${esc(p.status)}</span>` : '';
@@ -87,6 +89,19 @@
     </article>`;
   }).join('');
 
+  const netViz = fpItems.length && new Promise(resolve => {
+    const css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = 'assets/net-viz.css';
+    const js = document.createElement('script');
+    js.src = 'assets/net-viz.js';
+    let pending = 2;
+    const go = () => { if (--pending === 0) resolve(window.NetViz); };
+    css.onload = css.onerror = go;
+    js.onload = go;
+    document.head.append(css, js);
+  });
+
   // Card carousels: ‹ 1 2 3 › above the media, one slide (and one playing video) at a time.
   list.querySelectorAll('.car').forEach(car => {
     const nav = car.querySelector('.car-nav');
@@ -98,14 +113,18 @@
       cur = (i + all.length) % all.length;
       all.forEach((s, j) => {
         s.hidden = j !== cur;
-        const v = s.querySelector('video:not(.demo-stage video)');
+        if (j === cur && s.dataset.fp && !s.dataset.mounted) {
+          s.dataset.mounted = '1';
+          netViz.then(nv => nv.embed(s, fpItems[+s.dataset.fp], ''));
+        }
+        const v = s.querySelector('video');
         if (!v) return;
         if (j !== cur) return v.pause();
+        const btn = s.querySelector('[data-nv="play"]');
+        if (btn && btn.textContent !== 'pause') return;  // replay paused by the viewer: leave it
         if (v.dataset.src) { v.src = v.dataset.src; delete v.dataset.src; }
         v.play().catch(() => {});
       });
-      // the replay canvas sizes itself on resize; it measured 0 while hidden
-      if (all[cur].querySelector('#fp-host')) window.dispatchEvent(new Event('resize'));
       render();
     };
     const render = () => {
@@ -138,20 +157,6 @@
     });
   });
 
-  // Clip | live policy replay (assets/net-viz.js) on the card that has one.
-  const fp = (projects.find(p => !p.research && p.forwardPass) || {}).forwardPass;
-  if (fp) {
-    const css = document.createElement('link');
-    css.rel = 'stylesheet';
-    css.href = 'assets/net-viz.css';
-    const js = document.createElement('script');
-    js.src = 'assets/net-viz.js';
-    let pending = 2;
-    const go = () => { if (--pending === 0) window.NetViz.embed(document.getElementById('fp-host'), fp, ''); };
-    css.onload = css.onerror = go;
-    js.onload = go;
-    document.head.append(css, js);
-  }
 })();
 </script>
 </body>
