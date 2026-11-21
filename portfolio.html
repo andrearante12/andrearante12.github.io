@@ -152,6 +152,12 @@
     };
     show(0);
     car.querySelectorAll('.car-slide > img, .car-slide > video').forEach(el => {
+      const shape = () => {
+        const w = el.videoWidth || el.naturalWidth, h = el.videoHeight || el.naturalHeight;
+        if (w && h) el.classList.toggle('portrait', h > w);
+      };
+      el.addEventListener(el.tagName === 'VIDEO' ? 'loadedmetadata' : 'load', shape);
+      shape();
       el.addEventListener('error', () => drop(el), { once: true });
       if (el.tagName === 'IMG' && el.complete && !el.naturalWidth) drop(el);  // failed before we listened
     });
