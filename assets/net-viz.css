@@ -4,11 +4,11 @@
 
 .fp-host {
   container-type: inline-size;
-  --void: #f7f5ef;      /* panel */
-  --void-2: #ebe7dd;    /* chips, tracks, empty cells */
-  --stone: #dcd7cb;     /* hairlines */
-  --dim: #6f6a60;       /* labels */
-  --paper: #2b2925;     /* values */
+  --void: #ffffff;      /* panel */
+  --void-2: #f1f2f3;    /* chips, tracks, empty cells */
+  --stone: #e1e3e5;     /* hairlines */
+  --dim: #6f777d;       /* labels */
+  --paper: #2a2d30;     /* values */
   --gold: #946f24;
   --gold-rgb: 148, 111, 36;
   --gold-dim: #c9ae70;
