@@ -85,6 +85,7 @@
         : esc(p.title)}</h3>
       <p class="item-context">${esc(p.type)}${status}</p>
       <p class="item-desc">${esc(p.cardBlurb)}</p>
+      ${p.basedOn ? `<p class="item-based">Builds on <a href="${esc(p.basedOn.url)}" target="_blank" rel="noopener">${esc(p.basedOn.label)}</a>${p.basedOn.authors ? ` (${esc(p.basedOn.authors)})` : ''}</p>` : ''}
       ${media(p).length ? `<div class="car"><div class="car-nav"></div>${media(p).map(slide).join('')}</div>` : ''}
     </article>`;
   }).join('');

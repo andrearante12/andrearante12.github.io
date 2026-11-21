@@ -107,6 +107,8 @@
   .item-context { font-size: 14px; color: var(--muted); margin: 0 0 8px; }
   .item-status { font-size: 12px; border: 1px solid var(--border); border-radius: 3px; padding: 0 6px; margin-left: 6px; }
   .item-desc { font-size: 15px; margin: 0 0 12px; }
+  .item-desc:has(+ .item-based) { margin-bottom: 4px; }
+  .item-based { font-size: 14px; color: var(--muted); margin: 0 0 12px; }
   .item-links { font-size: 14px; margin: 0 0 14px; }
   .item-links a + a::before { content: "·"; color: var(--muted); margin: 0 8px; display: inline-block; }
   .item-thumb {

@@ -39,26 +39,6 @@
       {
         "src": "assets/projects/sortbots/slam_feature_mapping.gif",
         "label": "RTAB-Map feature matching during live SLAM mapping"
-      },
-      {
-        "src": "assets/projects/sortbots/detect_pedestrian.gif",
-        "label": "Obstacle detection: pedestrian"
-      },
-      {
-        "src": "assets/projects/sortbots/detect_robot.gif",
-        "label": "Obstacle detection: another robot"
-      },
-      {
-        "src": "assets/projects/sortbots/comms_in_range.gif",
-        "label": "Mesh comms: both robots in range of the gateway"
-      },
-      {
-        "src": "assets/projects/sortbots/comms_relay_hop.gif",
-        "label": "Mesh comms: 2-hop relay through the other robot"
-      },
-      {
-        "src": "assets/projects/sortbots/comms_direct_vs_relay.gif",
-        "label": "Mesh comms: direct link vs. routed relay around obstacles"
       }
     ]
   },
@@ -101,6 +81,11 @@
     "type": "Reinforcement Learning · Research",
     "github": "https://github.com/andrearante12/vgc-bench",
     "cardBlurb": "A fork and extension of the VGC-Bench Pokémon benchmark that tackles competitive team building. It uses Policy Space Response Oracle search with evolutionary oracles to build competitive Reg I VGC teams optimized adversarily against a meta population.",
+    "basedOn": {
+      "label": "VGC-Bench: Towards Mastering Diverse Team Strategies in Competitive Pokémon",
+      "authors": "Angliss et al., AAMAS",
+      "url": "https://arxiv.org/abs/2506.10326"
+    },
     "media": [
       {
         "src": "videos/vgc_demo.webm",
