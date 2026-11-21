@@ -86,9 +86,24 @@
       <p class="item-context">${esc(p.type)}${status}</p>
       <p class="item-desc">${esc(p.cardBlurb)}</p>
       <p class="item-links">${links}</p>
-      ${thumb(p)}
+      ${p.forwardPass ? '<div id="fp-host"></div>' : thumb(p)}
     </article>`;
   }).join('');
+
+  // Clip | live policy replay (assets/net-viz.js) on the card that has one.
+  const fp = (projects.find(p => !p.research && p.forwardPass) || {}).forwardPass;
+  if (fp) {
+    const css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = 'assets/net-viz.css';
+    const js = document.createElement('script');
+    js.src = 'assets/net-viz.js';
+    let pending = 2;
+    const go = () => { if (--pending === 0) window.NetViz.embed(document.getElementById('fp-host'), fp, ''); };
+    css.onload = css.onerror = go;
+    js.onload = go;
+    document.head.append(css, js);
+  }
 })();
 </script>
 </body>

@@ -663,5 +663,44 @@
     return { schema: schema, frames: frames };
   }
 
-  global.NetViz = { mount: mount, synthesize: synthesize };
+  /* Write the clip | replay block into `host` and start it.
+   * fp = projects.json `forwardPass`; base = path prefix from the page to the repo root. */
+  function embed(host, fp, base) {
+    base = base || "";
+    var e = function (v) {
+      return String(v == null ? "" : v).replace(/[&<>"']/g, function (c) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+      });
+    };
+    host.classList.add("fp-host");
+    host.innerHTML =
+      '<div class="demo-stage">' +
+        '<div class="clip-slot">' +
+          (fp.kicker ? '<span class="clip-kicker">' + e(fp.kicker) + "</span>" : "") +
+          '<video autoplay muted loop playsinline' + (fp.poster ? ' poster="' + e(base + fp.poster) + '"' : "") + ">" +
+            '<source src="' + e(base + fp.video) + '"></video>' +
+        "</div>" +
+        '<div class="net-wrap">' +
+          '<div class="net-controls">' +
+            '<button type="button" id="play">pause</button>' +
+            '<span id="scrub-label">—</span>' +
+            '<input id="scrub" type="range" min="0" max="0" value="0" aria-label="Replay step">' +
+          "</div>" +
+          '<div class="net-meta"><span id="env">env —</span><span id="step">step 0</span><span class="act" id="action">—</span></div>' +
+          '<div class="net-embed">' +
+            '<section class="panel" id="inputs"><h2>Observation</h2><div id="input-fields"></div></section>' +
+            '<section class="panel" id="net"><h2>State → action</h2><canvas id="canvas"></canvas></section>' +
+            '<section class="panel" id="outputs">' +
+              '<h2>Policy π(a|s)</h2><div id="action-bars"></div>' +
+              "<h2>Value V(s)</h2>" +
+              '<div class="gauge-track"><div class="gauge-fill" id="value-fill"></div></div>' +
+              '<div class="gauge-labels"><span id="value-min">—</span><span id="value-num">—</span><span id="value-max">—</span></div>' +
+            "</section>" +
+          "</div>" +
+        "</div>" +
+      "</div>";
+    mount({ url: fp.replay ? base + fp.replay : null, synth: fp.synth });
+  }
+
+  global.NetViz = { mount: mount, embed: embed, synthesize: synthesize };
 })(window);

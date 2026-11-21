@@ -1,7 +1,8 @@
 /* Forward-pass block on a project page: clip | live actor-critic replay (assets/net-viz.js).
  * The console panels stay dark in both themes; only the surrounding chrome follows site tokens. */
 
-.fp-block {
+.fp-host {
+  container-type: inline-size;
   --void: #12151a;
   --void-2: #1a1e24;
   --stone: #2a2d32;
@@ -13,8 +14,10 @@
   --hud: #b8d4a8;
   --lapis: #3d5a8a;
   --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
 
-  /* break out of the 760px article column to the page width */
+/* On the write-up page, break out of the 760px article column to the page width */
+.fp-block {
   position: relative;
   left: 50%;
   transform: translateX(-50%);
@@ -174,13 +177,19 @@
 }
 #value-num { color: var(--paper); }
 
-@media (max-width: 980px) {
+/* Narrower than the full three-panel console: keep clip | network side by side
+ * and drop the observation/policy side panels (the canvas still shows the voxels
+ * going in and the chosen action coming out). */
+@container (max-width: 900px) {
+  .demo-stage { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); }
+  .net-embed { grid-template-columns: 1fr; min-height: 0; }
+  .net-embed #inputs, .net-embed #outputs { display: none; }
+  .net-embed #net { border: 0; }
+  .net-embed #canvas, .demo-stage .clip-slot { min-height: 18rem; }
+}
+@container (max-width: 400px) {
   .demo-stage { grid-template-columns: 1fr; }
   .demo-stage .clip-slot { min-height: 0; aspect-ratio: 16 / 10; }
-}
-@media (max-width: 640px) {
-  .net-embed { grid-template-columns: 1fr; }
-  .net-embed #net { border: 0; border-top: 1px solid var(--stone); border-bottom: 1px solid var(--stone); }
 }
 @media (prefers-reduced-motion: reduce) {
   .abar .fill, .gauge-fill { transition: none; }
