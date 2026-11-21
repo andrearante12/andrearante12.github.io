@@ -93,9 +93,12 @@
   }
   .about p { margin: 0 0 14px; }
 
-  .pub-title { font-size: 18px; font-weight: 600; margin: 0 0 4px; }
-  .pub-meta { font-size: 14px; color: var(--muted); margin: 0 0 8px; }
-  .pub-desc { font-size: 15px; margin: 0; }
+  .pub-list { list-style: none; margin: 0; padding: 0; counter-reset: pub; }
+  .pub-list li { counter-increment: pub; display: grid; grid-template-columns: 2.4em 1fr; margin: 0 0 22px; }
+  .pub-list li:last-child { margin-bottom: 0; }
+  .pub-list li::before { content: "[" counter(pub) "]"; grid-row: 1 / span 2; font-size: 18px; font-weight: 600; color: var(--muted); line-height: 1.4; }
+  .pub-title { font-size: 18px; font-weight: 600; line-height: 1.4; margin: 0 0 4px; }
+  .pub-meta { font-size: 14px; color: var(--muted); margin: 0; }
 
   .item { padding: 22px 0; border-bottom: 1px solid var(--border); }
   .item:first-of-type { padding-top: 0; }
