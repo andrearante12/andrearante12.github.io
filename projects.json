@@ -11,6 +11,10 @@
         "label": "Pick and place demo"
       },
       {
+        "src": "videos/imitationarm_mujoco.mp4",
+        "label": "Pick and place in the MuJoCo simulator"
+      },
+      {
         "src": "videos/imitationarm_tape.mov",
         "label": "Picking up a tape measure"
       },
