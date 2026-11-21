@@ -14,7 +14,7 @@
   <div class="nav-inner">
     <a class="nav-name" href="./">Andre Arante</a>
     <ul class="nav-links">
-      <li><a href="./">CV</a></li>
+      <li><a href="./">About Me</a></li>
       <li><a href="portfolio.html" aria-current="page">Portfolio</a></li>
       <li><a href="publications.html">Publications</a></li>
       <li><a href="photography.html">Photography</a></li>
@@ -63,30 +63,107 @@
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c =>
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-  const thumb = p => {
-    if (!p.thumb) return '';
-    if (/\.(webm|mp4|mov)$/i.test(p.thumb))
-      return `<video class="item-thumb" src="${esc(p.thumb)}" autoplay loop muted playsinline preload="auto" aria-label="${esc(p.title)} demo"></video>`;
-    return `<img class="item-thumb" src="${esc(p.thumb)}" alt="${esc(p.title)}" loading="lazy" onerror="this.remove()">`;
+  // One card slide per media item. An item with a `replay`/`synth` is a clip | live
+  // policy replay (assets/net-viz.js), mounted the first time its slide is shown.
+  const fpItems = [];
+  const slide = (m, i) => {
+    const hide = i ? ' hidden' : '';
+    const label = esc(m.label || '');
+    if (m.replay || m.synth) return `<div class="car-slide" data-label="${label}" data-fp="${fpItems.push(m) - 1}"${hide}></div>`;
+    if (/\.(webm|mp4|mov)$/i.test(m.src))
+      // only the first video loads up front; the rest get their src when shown
+      return `<div class="car-slide" data-label="${label}"${hide}><video class="item-thumb" ${i ? 'data-src' : 'src'}="${esc(m.src)}" ${i ? '' : 'autoplay '}loop muted playsinline preload="${i ? 'none' : 'auto'}" aria-label="${label}"></video></div>`;
+    return `<div class="car-slide" data-label="${label}"${hide}><img class="item-thumb" src="${esc(m.src)}" alt="${label}" loading="lazy"></div>`;
   };
+  const media = p => p.media || [];
 
   list.innerHTML = projects.filter(p => !p.research).map(p => {
-    // A full write-up in this repo (`site`) is the best landing page;
-    // otherwise the per-project detail page.
-    const href = p.site || `projects/${p.slug}.html`;
-    const links = [
-      `<a href="${esc(href)}">${p.site ? 'Write-up' : 'Details'}</a>`,
-      p.github ? `<a href="${esc(p.github)}" target="_blank" rel="noopener">Code</a>` : ''
-    ].join('');
     const status = p.status ? `<span class="item-status">${esc(p.status)}</span>` : '';
     return `<article class="item">
-      <h3 class="item-title"><a href="${esc(href)}">${esc(p.title)}</a></h3>
+      <h3 class="item-title">${p.github
+        ? `<a href="${esc(p.github)}" target="_blank" rel="noopener">${esc(p.title)}</a>`
+        : esc(p.title)}</h3>
       <p class="item-context">${esc(p.type)}${status}</p>
       <p class="item-desc">${esc(p.cardBlurb)}</p>
-      <p class="item-links">${links}</p>
-      ${thumb(p)}
+      ${p.basedOn ? `<p class="item-based">Builds on <a href="${esc(p.basedOn.url)}" target="_blank" rel="noopener">${esc(p.basedOn.label)}</a>${p.basedOn.authors ? ` (${esc(p.basedOn.authors)})` : ''}</p>` : ''}
+      ${media(p).length ? `<div class="car"><div class="car-nav"></div>${media(p).map(slide).join('')}</div>` : ''}
     </article>`;
   }).join('');
+
+  const netViz = fpItems.length && new Promise(resolve => {
+    const css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = 'assets/net-viz.css';
+    const js = document.createElement('script');
+    js.src = 'assets/net-viz.js';
+    let pending = 2;
+    const go = () => { if (--pending === 0) resolve(window.NetViz); };
+    css.onload = css.onerror = go;
+    js.onload = go;
+    document.head.append(css, js);
+  });
+
+  // Card carousels: ‹ 1 2 3 › above the media, one slide (and one playing video) at a time.
+  list.querySelectorAll('.car').forEach(car => {
+    const nav = car.querySelector('.car-nav');
+    let cur = 0;
+    const slides = () => [...car.querySelectorAll('.car-slide')];
+    const show = i => {
+      const all = slides();
+      if (!all.length) return car.remove();
+      cur = (i + all.length) % all.length;
+      all.forEach((s, j) => {
+        s.hidden = j !== cur;
+        if (j === cur && s.dataset.fp && !s.dataset.mounted) {
+          s.dataset.mounted = '1';
+          netViz.then(nv => nv.embed(s, fpItems[+s.dataset.fp], ''));
+        }
+        const v = s.querySelector('video');
+        if (!v) return;
+        if (j !== cur) return v.pause();
+        const btn = s.querySelector('[data-nv="play"]');
+        if (btn && btn.textContent !== 'pause') return;  // replay paused by the viewer: leave it
+        if (v.dataset.src) { v.src = v.dataset.src; delete v.dataset.src; }
+        v.play().catch(() => {});
+      });
+      render();
+    };
+    const render = () => {
+      const all = slides();
+      const label = all[cur] ? all[cur].dataset.label : '';
+      nav.innerHTML = (all.length > 1
+        ? `<button type="button" data-step="-1" aria-label="Previous">‹</button>` +
+          all.map((_, j) => `<button type="button" data-go="${j}"${j === cur ? ' aria-current="true"' : ''} aria-label="Show ${j + 1}">${j + 1}</button>`).join('') +
+          `<button type="button" data-step="1" aria-label="Next">›</button>`
+        : '') + (label ? `<span class="car-label">${esc(label)}</span>` : '');
+      nav.hidden = !nav.innerHTML;
+    };
+    nav.addEventListener('click', e => {
+      const b = e.target.closest('button');
+      if (!b) return;
+      show(b.dataset.go != null ? +b.dataset.go : cur + +b.dataset.step);
+    });
+    // a missing image/video drops its slide instead of leaving an empty box
+    const drop = el => {
+      const s = el.closest('.car-slide');
+      if (!s.isConnected) return;
+      const at = slides().indexOf(s);
+      s.remove();
+      show(at < cur ? cur - 1 : Math.min(cur, slides().length - 1));
+    };
+    show(0);
+    car.querySelectorAll('.car-slide > img, .car-slide > video').forEach(el => {
+      const shape = () => {
+        const w = el.videoWidth || el.naturalWidth, h = el.videoHeight || el.naturalHeight;
+        if (w && h) el.classList.toggle('portrait', h > w);
+      };
+      el.addEventListener(el.tagName === 'VIDEO' ? 'loadedmetadata' : 'load', shape);
+      shape();
+      el.addEventListener('error', () => drop(el), { once: true });
+      if (el.tagName === 'IMG' && el.complete && !el.naturalWidth) drop(el);  // failed before we listened
+    });
+  });
+
 })();
 </script>
 </body>

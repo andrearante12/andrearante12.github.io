@@ -93,9 +93,12 @@
   }
   .about p { margin: 0 0 14px; }
 
-  .pub-title { font-size: 18px; font-weight: 600; margin: 0 0 4px; }
-  .pub-meta { font-size: 14px; color: var(--muted); margin: 0 0 8px; }
-  .pub-desc { font-size: 15px; margin: 0; }
+  .pub-list { list-style: none; margin: 0; padding: 0; counter-reset: pub; }
+  .pub-list li { counter-increment: pub; display: grid; grid-template-columns: 2.4em 1fr; margin: 0 0 22px; }
+  .pub-list li:last-child { margin-bottom: 0; }
+  .pub-list li::before { content: "[" counter(pub) "]"; grid-row: 1 / span 2; font-size: 18px; font-weight: 600; color: var(--muted); line-height: 1.4; }
+  .pub-title { font-size: 18px; font-weight: 600; line-height: 1.4; margin: 0 0 4px; }
+  .pub-meta { font-size: 14px; color: var(--muted); margin: 0; }
 
   .item { padding: 22px 0; border-bottom: 1px solid var(--border); }
   .item:first-of-type { padding-top: 0; }
@@ -104,12 +107,16 @@
   .item-context { font-size: 14px; color: var(--muted); margin: 0 0 8px; }
   .item-status { font-size: 12px; border: 1px solid var(--border); border-radius: 3px; padding: 0 6px; margin-left: 6px; }
   .item-desc { font-size: 15px; margin: 0 0 12px; }
+  .item-desc:has(+ .item-based) { margin-bottom: 4px; }
+  .item-based { font-size: 14px; color: var(--muted); margin: 0 0 12px; }
   .item-links { font-size: 14px; margin: 0 0 14px; }
   .item-links a + a::before { content: "·"; color: var(--muted); margin: 0 8px; display: inline-block; }
   .item-thumb {
     width: 60%; border-radius: 4px; border: 1px solid var(--border);
     background: var(--thumb-bg); aspect-ratio: 16 / 10; object-fit: cover;
   }
+  /* filmed vertically: show the whole frame at its own shape instead of a 16:10 crop */
+  .item-thumb.portrait { width: auto; max-width: 100%; height: min(70vh, 480px); aspect-ratio: auto; object-fit: contain; }
 
   /* ── CV entries (index.html) ── */
   .cv-lead { font-size: 15px; color: var(--muted); margin: -8px 0 32px; }
@@ -124,6 +131,17 @@
   .cv-skills { margin: 0; font-size: 15px; }
   .cv-skills dt { font-weight: 600; color: var(--heading); }
   .cv-skills dd { margin: 0 0 10px; }
+  .car-nav { display: flex; align-items: center; gap: 4px; margin: 0 0 8px; font-size: 13px; color: var(--muted); min-width: 0; }
+  .car-nav[hidden], .car-slide[hidden] { display: none; }
+  .car-nav button {
+    font: inherit; min-width: 26px; height: 26px; padding: 0 6px; cursor: pointer;
+    border: 1px solid var(--border); border-radius: 3px; background: transparent; color: var(--text);
+  }
+  .car-nav button:hover { border-color: var(--muted); }
+  .car-nav button[aria-current="true"] { background: var(--heading); border-color: var(--heading); color: var(--bg); }
+  .car-nav button + .car-label { margin-left: 8px; }
+  .car-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
   .more { font-size: 14px; margin: 12px 0 0; }
 
   footer {
