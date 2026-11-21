@@ -33,10 +33,6 @@
         "label": "Warehouse pick and place with a magnetic end effector"
       },
       {
-        "src": "assets/projects/sortbots/operator_view_demo.gif",
-        "label": "Operator dashboard assigning tasks across the fleet"
-      },
-      {
         "src": "assets/projects/sortbots/slam_feature_mapping.gif",
         "label": "RTAB-Map feature matching during live SLAM mapping"
       }
