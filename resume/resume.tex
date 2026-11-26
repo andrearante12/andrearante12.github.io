@@ -29,8 +29,8 @@
   \addtolength{\oddsidemargin}{-0.5in}
   \addtolength{\evensidemargin}{-0.5in}
   \addtolength{\textwidth}{1in}
-  \addtolength{\topmargin}{-.5in}
-  \addtolength{\textheight}{1.0in}
+  \addtolength{\topmargin}{-.6in}
+  \addtolength{\textheight}{1.2in}
 
   \urlstyle{same}
   \raggedbottom
@@ -53,6 +53,13 @@
     \end{tabular*}\vspace{-7pt}
   }
 
+  \newcommand{\resumeRoleHeading}[2]{
+    \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \small#1 & \small #2 \\
+    \end{tabular*}\vspace{-7pt}
+  }
+
   \newcommand{\resumeProjectHeading}[2]{
     \item
     \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
@@ -72,9 +79,10 @@
 %----------HEADING----------
 \begin{center}
   \textbf{\Huge \scshape Andre Arante} \\ \vspace{1pt}
-  \small (669) 333-4952 $|$ \href{mailto:andrearante12@gmail.com}{andrearante12@gmail.com} $|$
+  \small \href{mailto:andrearante12@gmail.com}{andrearante12@gmail.com} $|$
   \href{https://www.linkedin.com/in/andre-arante}{\underline{linkedin.com/in/andre-arante}} $|$
-  \href{https://github.com/andrearante12}{\underline{github.com/andrearante12}}
+  \href{https://github.com/andrearante12}{\underline{github.com/andrearante12}} $|$
+  \href{https://andrearante12.github.io}{\underline{Portfolio}}
 \end{center}
 
   %-----------EDUCATION-----------
@@ -83,11 +91,11 @@
     \vspace{-2pt}\item
     \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
       \textbf{The George Washington University} & Washington, DC \\
-      \textit{\small M.S. Artificial Intelligence and Machine Learning Engineering (4+1, Expected 05/28)} & \textit{\small Aug 2027 -- May 2028} \\
       \textit{\small B.S. Electrical and Computer Engineering, AI and Robotics Track} & \textit{\small Aug 2023 -- May 2027} \\
     \end{tabular*}\vspace{-7pt}
       \resumeItemListStart
         \resumeItem{Minor in Computer Science: coursework in Reinforcement Learning and Computer Vision; Technical GPA: 3.67}
+        \resumeItem{Intro to Digital Signal Processing and Intro to Data Structures and Algorithms Teaching Assistant}
       \resumeItemListEnd
   \resumeSubHeadingListEnd
 
@@ -95,35 +103,37 @@
   \section{Work Experience}
   \resumeSubHeadingListStart
 
-  \resumeSubheading
-    {Software Engineering Intern}{May 2026 -- Aug 2026}
-    {Dell Technologies}{Austin, TX}
+  \resumeRoleHeading
+    {\textbf{Robotics/AI Engineer Part-Time Contractor} $|$ AIM Robots, Inc $|$ \textit{Herndon, VA}}{Oct 2026 -- Present}
     \resumeItemListStart
-      \resumeItem{Fine-tuned a VLA policy (SmolVLA) via imitation learning on expert teleoperated demonstrations to perform autonomous hardware validation of Alienware keyboards on LeRobot's SO-ARM101 robotic arm}
-      \resumeItem{Built a teleoperation data-collection pipeline and GUI tools that catch corrupted demonstrations, cutting collection time from 30 to 8 minutes per task and training from 66h to 8h (88\%) with LoRA and sample-efficient RL}
-      \resumeItem{Improved task success from 40\% to 90\%, and enabled adaptation to new keyboards with 2 hours of training, by architecting an RL post-training methodology that trains a small policy to output corrective actions}
+      \resumeItem{Built a multi-camera calibration pipeline for an AUBO E5 industrial cobot that adapts to moved cameras and changes in work cell size and position, enabling \textbf{millimeter-level}, fully autonomous recalibration from vision alone}
     \resumeItemListEnd
 
-  \resumeSubheading
-    {Robotics/AI Engineer Part-Time Contractor}{Oct 2026 -- Present}
-    {AIM Robots, Inc}{Herndon, VA}
+  \resumeRoleHeading
+    {\textbf{Research Intern} $|$ Intelligent Aerospace Systems Lab $|$ \textit{Washington, DC}}{Sep 2025 -- Present}
     \resumeItemListStart
-      \resumeItem{Built a multi-camera calibration pipeline for an AUBO E5 industrial cobot that adapts to moved cameras and changes in work cell size and position, enabling millimeter-level, fully autonomous recalibration from vision alone}
+      \resumeItem{Fine-tuned open-vocab detection models for UAS landing obstruction detection, deployed in real-time at \textbf{56 FPS}}
+      \resumeItem{Built a reproducible benchmark and evaluation pipeline from 195 real UAS flight images that exposed catastrophic forgetting, then recovered it with balanced fine-tuning (WiSE-FT): \textbf{+137\% mAP@50}, 78\% open-vocab retention}
     \resumeItemListEnd
 
-  \resumeSubheading
-    {Research Intern}{Sep 2025 -- Present}
-    {Intelligent Aerospace Systems Lab, The George Washington University}{Washington, DC}
+  \resumeRoleHeading
+    {\textbf{Software Engineering Intern} $|$ Dell Technologies $|$ \textit{Austin, TX}}{May 2026 -- Aug 2026}
     \resumeItemListStart
-      \resumeItem{Led fine-tuning of YOLO-World for drone landing-zone obstruction detection, deployed at 56 FPS on Jetson Thor}
-      \resumeItem{Built a 195-image benchmark from real UAS flights that exposed catastrophic forgetting in fine-tuning, then recovered it with balanced fine-tuning (WiSE-FT): +137\% VisDrone mAP@50, 94\% open-vocab retention}
+      \resumeItem{Fine-tuned a VLA policy (SmolVLA) via imitation learning on a custom dataset teleoperated demonstrations, in order to preform autonomous hardware validation of Alienware products using LeRobot's SO-ARM101 robotic arm}
+      \resumeItem{Built a teleoperation data-collection and logging pipeline with GUI tools that flag corrupted demonstrations, cutting collection \textbf{from 30 to 8 min per task} and training from 66h to 8h (88\%) with LoRA and sample-efficient RL}
+      \resumeItem{Improved task success \textbf{from 40\% to 90\%} and enabled adaptation to new keyboards with 2 hours of training, via an reinforcement learning post-training method that trains a small policy to output corrective actions}
     \resumeItemListEnd
 
-  \resumeSubheading
-    {Software Engineering Intern}{Feb 2024 -- Feb 2025}
-    {C-3 Comm Systems, LLC}{Bethesda, MD}
+  \resumeRoleHeading
+    {\textbf{Software Engineering Intern} $|$ C-3 Comm Systems, LLC $|$ \textit{Bethesda, MD}}{Feb 2024 -- Feb 2025}
     \resumeItemListStart
       \resumeItem{Owned development of an autonomous ground vehicle, building a modular software stack for computer vision, obstacle detection, and navigation, plus a web GUI (React) for mission monitoring and remote takeover}
+    \resumeItemListEnd
+
+  \resumeRoleHeading
+    {\textbf{Data Science Intern} $|$ Kaiser Permanente $|$ \textit{San Jose, CA}}{Jun 2023 -- Aug 2023}
+    \resumeItemListStart
+      \resumeItem{Automated a SAS pipeline and Tableau dashboards over \textbf{millions of patient records} across 5 hospitals, replacing a manual workflow that gated critical staffing decisions}
     \resumeItemListEnd
 
   \resumeSubHeadingListEnd
@@ -134,7 +144,7 @@
 
   \resumeProjectHeading{\textbf{ImitationArm -- Robotic Arm Teleoperation Device}}{}
     \resumeItemListStart
-      \resumeItem{Designed a wearable glove controller (ESP32, MPU-6050 IMU) that teleoperates a 6-DoF arm to collect training data, filtering and calibrating noisy IMU data and coded the hand-to-arm transforms and inverse kinematics}
+      \resumeItem{Designed a wearable glove controller (ESP32, MPU-6050 IMU) that teleoperates a 6-DoF arm to collect training data, filtering and calibrating noisy IMU data and coding the hand-to-arm transforms and inverse kinematics}
     \resumeItemListEnd
 
   \resumeProjectHeading{\textbf{SortBots -- Senior Capstone, Sponsored by C-3 Comm Systems}}{}
@@ -154,13 +164,14 @@
   %-----------PUBLICATIONS-----------
   \section{Publications}
   \resumeSubHeadingListStart
-    \resumeItem{\textbf{A. Arante}, M. Ghazanfari, C. Vu, and P. Wei, ``Open-Vocabulary Obstruction Detection for UAS Landing via Fine-Tuned YOLO-World'' accepted to \textit{AIAA SciTech 2027}.}
+    \resumeItem{[1] \textbf{A. Arante}, M. Ghazanfari, C. Vu, and P. Wei, ``Open-Vocabulary Obstruction Detection for UAS Landing via Fine-Tuned YOLO-World,'' accepted to \textit{AIAA SciTech 2027}.}
+    \resumeItem{[2] H. Yang, M. Ghazanfari, \textbf{A. Arante}, P. Wei, and N. Wu, ``SIRIUS: Safety-Guided and Budget-Adaptive Streaming Vision-Language Inference on Autonomous Drones,'' submitted to \textit{DAC 2027}, in review.}
   \resumeSubHeadingListEnd
 
 %-----------SKILLS-----------
 \section{Technical Skills}
 \small{
-  \textbf{Skills:} Python, PyTorch, C/C++, ROS~2, MuJoCo, Isaac Sim, imitation learning, RL, VLAs, teleoperation, OpenCV, FreeCAD, SolidWorks, 3D printing, ESP32, Linux, Git
+  \textbf{Skills:} Python, PyTorch, imitation learning, behavior cloning, VLAs, teleoperation, RL, ROS~2, MuJoCo, Isaac Sim, OpenCV, CUDA, Linux, Git, FreeCAD, 3D printing
 }
 
   \end{document}
